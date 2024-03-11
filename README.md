@@ -17,4 +17,5 @@ Before you begin, ensure you have the following installed on your machine:
 3. **Create a Virtual Environment**: It's recommended to use a virtual environment to avoid conflicts with pre-installed Python versions. To create a virtual environment, use the following command, `virtualenv C:\Users\win\AppData\Local\Programs\Python\Python311 myenv`
 4. **Activate the virtual Environment**: use the command `.myenv\Scripts\activate`
 5. **Install Dependencies**: With the virtual environment activated, run the following command to install all the dependencies listed in the `requirements.txt` file `pip install -r requirements.txt`
+                                                                     ##እኔ  ባጎደልኩ መዳኒያለም ይሙላ  
 
