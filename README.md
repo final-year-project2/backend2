@@ -18,5 +18,5 @@ Before you begin, ensure you have the following installed on your machine:
 4. **Activate the virtual Environment**: use the command `.myenv\Scripts\activate`
 5. **Install Dependencies**: With the virtual environment activated, run the following command to install all the dependencies listed in the `requirements.txt` file `pip install -r requirements.txt`
 .
-      ## እኔ  ባጎደልኩ መዳኒያለም ይሙላ  ##🙂
+      # እኔ  ባጎደልኩ መዳኒያለም ይሙላ  ##🙂
 
