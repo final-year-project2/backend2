@@ -18,7 +18,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
 from datetime import timedelta
-
+MAX_OTP_TRY = 3
+MIN_PASSWORD_LENGTH = 6
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
