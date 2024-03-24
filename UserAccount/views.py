@@ -1,8 +1,13 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework import generics
+from rest_framework import generics,status
 from .models import userAccountModel
 from .serializer import UserAcountSerializer
+from rest_framework.response import Response
+import random
+from datetime import timedelta
+from django.utils import timezone
+from django.conf import settings
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -16,7 +21,50 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-
+"""this CreateUserAcount class is used to create user account"""
 class CreateUserAcount(generics.CreateAPIView):
     queryset = userAccountModel.objects.all()
     serializer_class = UserAcountSerializer
+
+class ActivateUserAcount(generics.UpdateAPIView):
+    queryset = userAccountModel.objects.all()
+    serializer_class = UserAcountSerializer
+
+    def update(self, serializer, *args, **kwargs):
+        instance = self.get_object()
+        if(not instance.is_active and self.request.data['Phone_no'] == instance.Otp and instance.Otp_expre_at):
+            instance.is_active = True
+            instance.Otp_expre_at = None
+            instance.Maximum_otp_try = settings.MAX_OTP_TRY
+            instance.Maximum_otp_out = None
+            instance.save()
+            return Response('Successfully activated',status=status.HTTP_200_OK)
+        else:
+            return Response('user alredy active or please inter correct otp ',status=status.HTTP_400_BAD_REQUEST)
+        
+
+class RegenerateOtp(generics.UpdateAPIView):
+    queryset = userAccountModel.objects.all()
+    serializer_class = UserAcountSerializer
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if int(instance.Maximum_otp_try) == 0 and timezone.now() < instance.Maximum_otp_out:
+            return Response('Max otp try reacheded, try after an houre',status=status.HTTP_400_BAD_REQUEST)
+        
+        otp = random.randint(1000,9999)
+        Maximum_otp_try = int(instance.Maximum_otp_try)-1
+        Otp_expre_at = timezone.now() + timedelta(minutes=10)
+        instance.Otp = otp
+        instance.Maximum_otp_try = Maximum_otp_try
+        instance.Otp_expre_at = Otp_expre_at
+        if Maximum_otp_try==0:
+            instance.Maximum_otp_out = timezone.now() + timedelta(hours=1)
+        elif Maximum_otp_try== -1:
+            instance.Maximum_otp_try = settings.MAX_OTP_TRY
+        else:
+            instance.Maximum_otp_out = None
+            instance.Maximum_otp_try = Maximum_otp_try
+        instance.save()
+        # to do send otp
+        return Response('successfuly regenerated',status=status.HTTP_200_OK)
