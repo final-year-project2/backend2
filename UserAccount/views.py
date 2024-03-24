@@ -27,6 +27,8 @@ class CreateUserAcount(generics.CreateAPIView):
     queryset = userAccountModel.objects.all()
     serializer_class = UserAcountSerializer
 
+
+"""this ActivateUserAcount class used for activate user account"""
 class ActivateUserAcount(generics.UpdateAPIView):
     queryset = userAccountModel.objects.all()
     serializer_class = UserAcountSerializer
@@ -43,7 +45,7 @@ class ActivateUserAcount(generics.UpdateAPIView):
         else:
             return Response('user alredy active or please inter correct otp ',status=status.HTTP_400_BAD_REQUEST)
         
-
+"""this RegenerateOtp class is used for regenerate new otp """
 class RegenerateOtp(generics.UpdateAPIView):
     queryset = userAccountModel.objects.all()
     serializer_class = UserAcountSerializer
@@ -81,3 +83,39 @@ class RegenerateOtp(generics.UpdateAPIView):
         except:
             print('some thing went ')
         return Response('successfuly regenerated',status=status.HTTP_200_OK)
+    
+
+
+"""this getMyOtp class is used for to get verification no for password reset"""
+class getMyOtp(generics.UpdateAPIView):
+    queryset = userAccountModel.objects.all()
+    serializer_class = UserAcountSerializer
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        Otp = instance.Otp
+        phone_no = instance.Phone_no
+        try:
+            account_sid = 'AC3b149e8df13637611de9a595d354ca2c'
+            auth_token = '1620448415bdf0cc3de4a315a93e568f'
+            client = Client(account_sid, auth_token)
+            message = client.messages.create(
+            body=f'Hello your verification number is {Otp}',
+            from_='+13082223702',
+            to=f'+251{phone_no}'
+            )
+            return Response('verification no send successfuly',status=status.HTTP_200_OK)
+        except:
+            return Response('SOMETHING WENT WRONG TRY AGAIN successfuly',status=status.HTTP_400_BAD_REQUEST)
+
+class PasswordReset(generics.UpdateAPIView):
+    queryset = userAccountModel.objects.all()
+    serializer_class = UserAcountSerializer
+
+    def update(self, serializer, *args, **kwargs):
+            instance = self.get_object()
+            if(self.request.data['Phone_no'] == instance.Otp and self.request.data['password1'] == self.request.data['password2'] ):
+                instance.set_password(self.request.data['password1'])
+                instance.save()
+                return Response('password Successfully changed',status=status.HTTP_200_OK)
+            else:
+                return Response('incorrect verification Number or password dose not match ',status=status.HTTP_400_BAD_REQUEST)
