@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import userAccountModel
 from datetime import datetime,timedelta
 from django.conf import settings
+from twilio.rest import Client
 import random
 class UserAcountSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(write_only = True,min_length = 6)
@@ -21,6 +22,7 @@ class UserAcountSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         Otp = random.randint(1000,9999)
         Otp_expre_at = datetime.now() + timedelta(minutes=10)
+        Phone_no = int(validated_data['Phone_no']),
         user = userAccountModel(
             name = validated_data['name'],
             Email = validated_data['Email'],
@@ -31,4 +33,16 @@ class UserAcountSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password1'])
         user.save()
+        try:
+            account_sid = 'AC3b149e8df13637611de9a595d354ca2c'
+            auth_token = '1620448415bdf0cc3de4a315a93e568f'
+            client = Client(account_sid, auth_token)
+            message = client.messages.create(
+            body=f'Hello your Otp is {Otp}',
+            from_='+13082223702',
+            to=f'+251{Phone_no}'
+            )
+            print(message.sid)
+        except:
+            print('some thing went ')
         return user
