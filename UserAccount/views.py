@@ -113,8 +113,8 @@ class PasswordReset(generics.UpdateAPIView):
 
     def update(self, serializer, *args, **kwargs):
             instance = self.get_object()
-            if(self.request.data['Phone_no'] == instance.Otp and self.request.data['password1'] == self.request.data['password2'] ):
-                instance.set_password(self.request.data['password1'])
+            if(self.request.data['Phone_no'] == instance.Otp):
+                instance.set_password(self.request.data['password'])
                 instance.save()
                 return Response('password Successfully changed',status=status.HTTP_200_OK)
             else:
