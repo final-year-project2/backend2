@@ -119,3 +119,4 @@ class PasswordReset(generics.UpdateAPIView):
                 return Response('password Successfully changed',status=status.HTTP_200_OK)
             else:
                 return Response('incorrect verification Number or password dose not match ',status=status.HTTP_400_BAD_REQUEST)
+            
