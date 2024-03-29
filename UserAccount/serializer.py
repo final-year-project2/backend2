@@ -7,10 +7,15 @@ import random
 class UserAcountSerializer(serializers.ModelSerializer):
     # password1 = serializers.CharField(write_only = True,min_length = 6)
     # password2 = serializers.CharField(write_only = True,min_length = 6)
+    otp = serializers.CharField(write_only = True , allow_null=True, allow_blank=True)
     class Meta:
         model = userAccountModel
         fields = [
-            'id','name','Phone_no','password'
+
+            
+
+            'id','name','Email','Phone_no','password','otp'
+
         ]
     
     
@@ -30,8 +35,12 @@ class UserAcountSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         try:
+
             account_sid = 'AC1f60594b29e4d473a43a8f17a181d65f'
             auth_token = '622e83e6e2e6fcc2de407e570dd9e53b'
+
+         
+
             client = Client(account_sid, auth_token)
             message = client.messages.create(
             body=f'Hello your Otp is {Otp}',
