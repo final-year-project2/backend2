@@ -116,7 +116,7 @@ class getVerificationNo(generics.RetrieveAPIView):
 this verufyVerificationNo class is used to authenticate wether the user inter the correct otp what we ssend befor request (getVerificationNo) request.
 frome here may be you get 404 not found error so you have to consider it
 """
-class verufyVerificationNo(generics.RetrieveAPIView):
+class verifyVerificationNo(generics.RetrieveAPIView):
     queryset = userAccountModel.objects.all()
     serializer_class = UserAcountSerializer
     lookup_field = 'Phone_no'
