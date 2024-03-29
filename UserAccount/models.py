@@ -23,7 +23,7 @@ class userAcountManager(BaseUserManager):
         user.set_password(password)
         user.save()
         return user
-    
+
     def create_superuser(self,name,Email,Phone_no,password = None):
         user = self.model(name = name,Email = Email,Phone_no = Phone_no)
         user.set_password(password)
