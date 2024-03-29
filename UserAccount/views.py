@@ -35,7 +35,7 @@ class ActivateUserAcount(generics.UpdateAPIView):
 
     def update(self, serializer, *args, **kwargs):
         instance = self.get_object()
-        if(not instance.is_active and self.request.data['Phone_no'] == instance.Otp and instance.Otp_expre_at):
+        if(not instance.is_active and self.request.data['otp'] == instance.Otp and instance.Otp_expre_at):
             instance.is_active = True
             instance.Otp_expre_at = None
             instance.Maximum_otp_try = settings.MAX_OTP_TRY
@@ -72,7 +72,7 @@ class RegenerateOtp(generics.UpdateAPIView):
         instance.save()
         try:
             account_sid = 'AC3b149e8df13637611de9a595d354ca2c'
-            auth_token = '1620448415bdf0cc3de4a315a93e568f'
+            auth_token = 'd0961b8aa6ad93f5411c2528cb990341'
             client = Client(account_sid, auth_token)
             message = client.messages.create(
             body=f'Hello your Otp is {otp}',
@@ -86,17 +86,21 @@ class RegenerateOtp(generics.UpdateAPIView):
     
 
 
-"""this getMyOtp class is used for to get verification no for password reset"""
-class getMyOtp(generics.UpdateAPIView):
+"""
+this getVerificationNo class is used for to get verification no for password reset.
+frome here may be you get 404 not found error so you have to consider it
+"""
+class getVerificationNo(generics.RetrieveAPIView):
     queryset = userAccountModel.objects.all()
     serializer_class = UserAcountSerializer
-    def update(self, request, *args, **kwargs):
+    lookup_field = 'Phone_no'
+    def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         Otp = instance.Otp
         phone_no = instance.Phone_no
         try:
             account_sid = 'AC3b149e8df13637611de9a595d354ca2c'
-            auth_token = '1620448415bdf0cc3de4a315a93e568f'
+            auth_token = 'd0961b8aa6ad93f5411c2528cb990341'
             client = Client(account_sid, auth_token)
             message = client.messages.create(
             body=f'Hello your verification number is {Otp}',
@@ -105,15 +109,32 @@ class getMyOtp(generics.UpdateAPIView):
             )
             return Response('verification no send successfuly',status=status.HTTP_200_OK)
         except:
-            return Response('SOMETHING WENT WRONG TRY AGAIN successfuly',status=status.HTTP_400_BAD_REQUEST)
+            return Response('messaging service dose not work try again',status=status.HTTP_400_BAD_REQUEST)
+        
+
+"""
+this verufyVerificationNo class is used to authenticate wether the user inter the correct otp what we ssend befor request (getVerificationNo) request.
+frome here may be you get 404 not found error so you have to consider it
+"""
+class verufyVerificationNo(generics.RetrieveAPIView):
+    queryset = userAccountModel.objects.all()
+    serializer_class = UserAcountSerializer
+    lookup_field = 'Phone_no'
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if( self.request.data['otp'] == instance.Otp):
+            return Response('correct verification no',status=status.HTTP_200_OK)
+        else:
+            return Response('incorrect verification no please use your phone no or correct verification no',status=status.HTTP_400_BAD_REQUEST)
+
 
 class PasswordReset(generics.UpdateAPIView):
     queryset = userAccountModel.objects.all()
     serializer_class = UserAcountSerializer
-
+    lookup_field = 'Phone_no'
     def update(self, serializer, *args, **kwargs):
             instance = self.get_object()
-            if(self.request.data['Phone_no'] == instance.Otp):
+            if(self.request.data['otp'] == instance.Otp):
                 instance.set_password(self.request.data['password'])
                 instance.save()
                 return Response('password Successfully changed',status=status.HTTP_200_OK)
