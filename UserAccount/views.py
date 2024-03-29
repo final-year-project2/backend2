@@ -125,7 +125,7 @@ class verufyVerificationNo(generics.RetrieveAPIView):
         if( self.request.data['otp'] == instance.Otp):
             return Response('correct verification no',status=status.HTTP_200_OK)
         else:
-            return Response('incorrect verification no please use your phone no or correct verification no',status=status.HTTP_400_BAD_REQUEST)
+            return Response('incorrect verification no please use correct phone_no or correct verification_no',status=status.HTTP_400_BAD_REQUEST)
 
 
 class PasswordReset(generics.UpdateAPIView):
