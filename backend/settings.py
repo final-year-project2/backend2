@@ -33,7 +33,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '[::1]',  # IPv6 localhost
-    '192.168.137.28',  # Your IPv4 address
+    '192.168.137.104' # Your IPv4 address
 ]
 
 
@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist'
 ]
 CORS_ALLOWED_ORIGINS = [
-    "http://192.168.137.28:56803",  # Replace with your IP address and port
+    'http://192.168.137.28', 
+    # Replace with your IP address and port
     # Add more origins if needed
 ]
 REST_FRAMEWORK = {
