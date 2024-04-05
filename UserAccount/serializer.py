@@ -31,15 +31,26 @@ class UserAcountSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         try:
-            account_sid = 'AC3b149e8df13637611de9a595d354ca2c'
-            auth_token = 'd0961b8aa6ad93f5411c2528cb990341'
+            account_sid = 'ACea49addac6602dcde78dfd3489070132'
+            auth_token = '7662fe49f14b65c537775a13675fa48b'
             client = Client(account_sid, auth_token)
             message = client.messages.create(
             body=f'Hello your Otp is {Otp}',
-            from_='+13082223702',
+            from_='+13109064102',
             to=f'+251{Phone_no}'
             )
             print(message.sid)
         except:
             print('some thing went wrong try again ')
         return user
+from rest_framework import serializers
+
+# class SaveTicketSerializer(serializers.Serializer):
+#     title = serializers.CharField(max_length=100)
+#     description = serializers.CharField(max_length=500)
+#     number_of_tickets = serializers.IntegerField()
+#     prize_category = serializers.CharField(max_length=100)
+#     seller = serializers.CharField(max_length=100) # Adjust the field type as necessary
+#     image_1 = serializers.ImageField()
+#     image_2 = serializers.ImageField()
+#     image_3 = serializers.ImageField()

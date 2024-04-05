@@ -6,6 +6,7 @@ from .serializer import UserAcountSerializer
 from rest_framework.response import Response
 from twilio.rest import Client
 import random
+from rest_framework.views import APIView
 from datetime import timedelta
 from django.utils import timezone
 from django.conf import settings
@@ -99,12 +100,12 @@ class getVerificationNo(generics.RetrieveAPIView):
         Otp = instance.Otp
         phone_no = instance.Phone_no
         try:
-            account_sid = 'AC3b149e8df13637611de9a595d354ca2c'
-            auth_token = 'd0961b8aa6ad93f5411c2528cb990341'
+            account_sid = 'ACea49addac6602dcde78dfd3489070132'
+            auth_token = '7662fe49f14b65c537775a13675fa48b'
             client = Client(account_sid, auth_token)
             message = client.messages.create(
             body=f'Hello your verification number is {Otp}',
-            from_='+13082223702',
+            from_='+13109064102',
             to=f'+251{phone_no}'
             )
             return Response('verification no send successfuly',status=status.HTTP_200_OK)
@@ -140,4 +141,4 @@ class PasswordReset(generics.UpdateAPIView):
                 return Response('password Successfully changed',status=status.HTTP_200_OK)
             else:
                 return Response('incorrect verification Number or password dose not match ',status=status.HTTP_400_BAD_REQUEST)
-            
+

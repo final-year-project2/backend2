@@ -29,7 +29,13 @@ SECRET_KEY = 'django-insecure-bl*be%&5=uj&vvb0b#o9r!#mff%85$-ho((r&zi3^$34_r@a72
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '[::1]',  # IPv6 localhost
+    '192.168.137.28',  # Your IPv4 address
+]
+
 
 
 # Application definition
@@ -42,8 +48,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'UserAccount',
+    'Product',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist'
+]
+CORS_ALLOWED_ORIGINS = [
+    "http://192.168.137.28:56803",  # Replace with your IP address and port
+    # Add more origins if needed
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -126,7 +137,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'final_year_project',
         'USER':'postgres',
-        'PASSWORD': 'bdu1203346',
+        'PASSWORD': 'admin123',
         'HOST':'localhost',
 
     }
