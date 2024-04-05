@@ -11,6 +11,13 @@ from datetime import timedelta
 from django.utils import timezone
 from django.conf import settings
 
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+
+
+
 
 
 
@@ -91,8 +98,8 @@ class RegenerateOtp(generics.UpdateAPIView):
             instance.Maximum_otp_try = Maximum_otp_try
         instance.save()
         try:
-            account_sid = 'AC3b149e8df13637611de9a595d354ca2c'
-            auth_token = 'd0961b8aa6ad93f5411c2528cb990341'
+            account_sid = os.environ.get('ACCOUNT_SSID')
+            auth_token = os.environ.get('AUTH_TOKEN')
             client = Client(account_sid, auth_token)
             message = client.messages.create(
             body=f'Hello your Otp is {otp}',
@@ -119,17 +126,17 @@ class getVerificationNo(generics.RetrieveAPIView):
         Otp = instance.Otp
         phone_no = instance.Phone_no
         try:
-            account_sid = 'AC3b149e8df13637611de9a595d354ca2c'
-            auth_token = 'd0961b8aa6ad93f5411c2528cb990341'
+            account_sid = os.environ.get('ACCOUNT_SSID')
+            auth_token = os.environ.get('AUTH_TOKEN')
             client = Client(account_sid, auth_token)
             message = client.messages.create(
             body=f'Hello your verification number is {Otp}',
-            from_='+13082223702',
+            from_='+17603024639',
             to=f'+251{phone_no}'
             )
-            return Response('verification no send successfuly',status=status.HTTP_200_OK)
-        except:
-            return Response('messaging service dose not work try again',status=status.HTTP_400_BAD_REQUEST)
+            return Response('verification number send successfuly',status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(f'messaging service dose not work try again {e}',status=status.HTTP_400_BAD_REQUEST)
         
 
 """

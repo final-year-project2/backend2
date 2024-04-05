@@ -15,17 +15,17 @@ BaseUserManager => this class in Django is a base class provided by Django's aut
 
 
 class userAcountManager(BaseUserManager):
-    def create_user(self,name,Email,Phone_no,Otp,Otp_expre_at,Maximum_otp_try,Maximum_otp_out,password = None):
-        if not Email :
+    def create_user(self,name,Phone_no,Otp,Otp_expre_at,Maximum_otp_try,Maximum_otp_out,password = None):
+        if not name :
             raise ValueError('user must have email addres')
-        Email = self.normalize_email(Email)
-        user = self.model(name = name,Email = Email,Phone_no = Phone_no,Otp = Otp,Otp_expre_at = Otp_expre_at,Maximum_otp_try = Maximum_otp_try,Maximum_otp_out = Maximum_otp_out)
+        # Email = self.normalize_email(Email)
+        user = self.model(name = name,Phone_no = Phone_no,Otp = Otp,Otp_expre_at = Otp_expre_at,Maximum_otp_try = Maximum_otp_try,Maximum_otp_out = Maximum_otp_out)
         user.set_password(password)
         user.save()
         return user
 
-    def create_superuser(self,name,Email,Phone_no,password = None):
-        user = self.model(name = name,Email = Email,Phone_no = Phone_no)
+    def create_superuser(self,name,Phone_no,password = None):
+        user = self.model(name = name,Phone_no = Phone_no)
         user.set_password(password)
         user.is_active = True
         user.is_staff = True
@@ -35,7 +35,7 @@ class userAcountManager(BaseUserManager):
 
 class userAccountModel(AbstractBaseUser,PermissionsMixin):
     name = models.CharField(max_length = 50, null = False, blank = False)
-    Email = models.EmailField(max_length = 50,unique = True , null = True, blank = True)
+    # Email = models.EmailField(max_length = 50,unique = True , null = True, blank = True)
     Phone_no = models.CharField(max_length = 13,unique = True, null = False, blank = False)
     Otp = models.CharField(max_length = 4)
     Otp_expre_at = models.DateTimeField(null = True,blank = True)
@@ -46,7 +46,7 @@ class userAccountModel(AbstractBaseUser,PermissionsMixin):
     is_staff = models.BooleanField(default = False)
     objects = userAcountManager()
     USERNAME_FIELD = 'Phone_no'
-    REQUIRED_FIELDS = ["name","Email"]
+    REQUIRED_FIELDS = ["name"]
 
     def __str__(self):
         return self.Phone_no

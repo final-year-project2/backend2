@@ -4,6 +4,12 @@ from datetime import datetime,timedelta
 from django.conf import settings
 from twilio.rest import Client
 import random
+from django.utils import timezone
+
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 class UserAcountSerializer(serializers.ModelSerializer):
     # password1 = serializers.CharField(write_only = True,min_length = 6)
     # password2 = serializers.CharField(write_only = True,min_length = 6)
@@ -14,7 +20,7 @@ class UserAcountSerializer(serializers.ModelSerializer):
 
             
 
-            'id','name','Email','Phone_no','password','otp'
+            'id','name','Phone_no','password','otp'
 
         ]
     
@@ -22,7 +28,7 @@ class UserAcountSerializer(serializers.ModelSerializer):
     "this create function is used for hash(encript) the password field "
     def create(self, validated_data):
         Otp = random.randint(1000,9999)
-        Otp_expre_at = datetime.now() + timedelta(minutes=10)
+        Otp_expre_at = timezone.now() + timedelta(minutes=10)
         Phone_no = int(validated_data['Phone_no']),
         user = userAccountModel(
             name = validated_data['name'],
@@ -36,8 +42,8 @@ class UserAcountSerializer(serializers.ModelSerializer):
         user.save()
         try:
 
-            account_sid = 'AC1f60594b29e4d473a43a8f17a181d65f'
-            auth_token = '622e83e6e2e6fcc2de407e570dd9e53b'
+            account_sid = os.environ.get('ACCOUNT_SSID')
+            auth_token =os.environ.get('AUTH_TOKEN') 
 
          
 
