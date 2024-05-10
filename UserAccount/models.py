@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin,BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin,BaseUserManager,User
 from django.utils import timezone
 from django.conf import settings
 
@@ -50,5 +50,11 @@ class userAccountModel(AbstractBaseUser,PermissionsMixin):
 
     def __str__(self):
         return self.Phone_no
+    
+class wallet(models.Model):
+    user=models.OneToOneField(userAccountModel,on_delete=models.CASCADE) 
+    balance=models.FloatField(max_length=8,default=0.0 )
+    
+    
 
     
