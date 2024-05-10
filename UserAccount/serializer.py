@@ -16,6 +16,9 @@ logger=logging.getLogger(__name__)
 class UserAcountSerializer(serializers.ModelSerializer):
     # password1 = serializers.CharField(write_only = True,min_length = 6)
     # password2 = serializers.CharField(write_only = True,min_length = 6)
+    # wallet=serializers.PrimaryKeyRelatedField(queryset=Wallet.objects.all())
+    
+
     otp = serializers.CharField(write_only = True , allow_null=True, allow_blank=True)
     class Meta:
         model = userAccountModel
@@ -23,7 +26,7 @@ class UserAcountSerializer(serializers.ModelSerializer):
 
             
 
-            'id','name','Phone_no','password','otp'
+            'id','name','Phone_no','password','otp',
 
         ]
     
@@ -60,6 +63,11 @@ class UserAcountSerializer(serializers.ModelSerializer):
         except:
             print('some thing went wrong try again ')
         return user
+    def to_representation(self, instance):
+        representatioin= super().to_representation(instance)
+        representatioin['wallet_id']=instance.wallet.id
+        return representatioin
+    
     
 from rest_framework import serializers
 from.models import Transaction

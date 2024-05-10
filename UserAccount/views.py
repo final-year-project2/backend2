@@ -1,5 +1,6 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from django.shortcuts import get_object_or_404
 from rest_framework import generics,status
 from .models import userAccountModel,Wallet
 from .serializer import UserAcountSerializer,TransactionSerializer,WalletSerializer
@@ -185,7 +186,9 @@ class UpdateWallet(APIView):
         
         wallet_id=kwargs['wallet_id']
         print(f"walletid:{wallet_id}")
-        wallet = Wallet.objects.get(id=wallet_id)
+        wallet = get_object_or_404(Wallet, id=wallet_id)
+        if not wallet:
+            return Response({"message":"user do not exists"},status=status.HTTP_400_BAD_REQUEST)
         serializer = TransactionSerializer(data=request.data)
 
         if serializer.is_valid():
