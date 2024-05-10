@@ -16,13 +16,21 @@ BaseUserManager => this class in Django is a base class provided by Django's aut
 
 class userAcountManager(BaseUserManager):
     def create_user(self,name,Phone_no,Otp,Otp_expre_at,Maximum_otp_try,Maximum_otp_out,password = None):
+      try:  
         if not name :
             raise ValueError('user must have name ')
         # Email = self.normalize_email(Email)
         user = self.model(name = name,Phone_no = Phone_no,Otp = Otp,Otp_expre_at = Otp_expre_at,Maximum_otp_try = Maximum_otp_try,Maximum_otp_out = Maximum_otp_out)
         user.set_password(password)
         user.save()
-        Wallet.objects.create(user=user,balance=0.0)
+        
+     
+        
+        
+        
+        print(f"wallet is created for {user}")
+      except Exception as e:
+        print('error creatign wallet')
         return user
 
     def create_superuser(self,name,Phone_no,password = None):
@@ -48,6 +56,12 @@ class userAccountModel(AbstractBaseUser,PermissionsMixin):
     objects = userAcountManager()
     USERNAME_FIELD = 'Phone_no'
     REQUIRED_FIELDS = ["name"]
+    def save(self, *args, **kwargs):
+        # Call the "real" save method.
+        super().save(*args, **kwargs)
+        # Now, create a wallet for the user.
+        Wallet.objects.create(user=self, balance=0.0)
+
 
     def __str__(self):
         return self.Phone_no
@@ -55,17 +69,21 @@ class userAccountModel(AbstractBaseUser,PermissionsMixin):
 class Wallet(models.Model):
     user=models.OneToOneField(userAccountModel,on_delete=models.CASCADE) 
     balance=models.DecimalField(max_digits=8,default=0.0 ,decimal_places=2)
+    def __str__(self):
+        return f"{self.id}'s wallet"
 
 class Transaction(models.Model):
     TRANSACTION_TYPE_CHOICES= [
-        ('deposite','DEPOSITE'),
+        ('deposit','DEPOSIT'),
         ('withdrawal','WITHDRAWAL')
     ]
     
-    wallet=models.ForeignKey('Wallet',on_delete=models.CASCADE,related_name='transactions')
+    wallet=models.ForeignKey(Wallet,on_delete=models.CASCADE,related_name='transactions')
     amount=models.DecimalField(max_digits=8,decimal_places=2)
     transaction_type=models.CharField(max_length=10,choices=TRANSACTION_TYPE_CHOICES)
     transaction_date=models.DateTimeField(default=timezone.now)
+    def __str__(self):
+        return self.wallet
     
 
     

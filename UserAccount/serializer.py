@@ -1,15 +1,18 @@
 from rest_framework import serializers
-from .models import userAccountModel
+from .models import userAccountModel,Transaction
 from datetime import datetime,timedelta
 from django.conf import settings
 from twilio.rest import Client
 import random
 from django.utils import timezone
 
+
 import os
 from dotenv import load_dotenv
 load_dotenv()
+import logging
 
+logger=logging.getLogger(__name__)
 class UserAcountSerializer(serializers.ModelSerializer):
     # password1 = serializers.CharField(write_only = True,min_length = 6)
     # password2 = serializers.CharField(write_only = True,min_length = 6)
@@ -57,3 +60,20 @@ class UserAcountSerializer(serializers.ModelSerializer):
         except:
             print('some thing went wrong try again ')
         return user
+    
+from rest_framework import serializers
+from.models import Transaction
+
+class TransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Transaction
+        fields = ['id', 'amount', 'transaction_type']
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        # Corrected typo from 'balace' to 'balance'
+        representation['wallet_balance'] = instance.wallet.balance
+        return representation
+
+           
+     

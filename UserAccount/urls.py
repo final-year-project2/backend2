@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (
 
 # from .views import MyTokenObtainPairView,CreateUserAcount,ActivateUserAcount, ApiDocsView,PasswordReset,RegenerateOtp,getMyOtp
 
-from .views import MyTokenObtainPairView,CreateUserAcount,ActivateUserAcount, PasswordReset,RegenerateOtp,getVerificationNo,verifyVerificationNo,ApiDocsView
+from .views import MyTokenObtainPairView,CreateUserAcount,ActivateUserAcount, PasswordReset,RegenerateOtp,getVerificationNo,verifyVerificationNo,ApiDocsView,UpdateWallet
 
 from django.urls import path
 
@@ -17,10 +17,11 @@ urlpatterns = [
     # path('getVerification/<int:pk>/',getMyOtp.as_view()),
     # path('resetpassword/<int:pk>/',PasswordReset.as_view()),
     path('login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
-
+    path('updateWallet/<int:wallet_id>', UpdateWallet.as_view(), name='update_wallet'),
+    
     path('getVerification/<str:Phone_no>/',getVerificationNo.as_view()),
     path('verifyVerification/<str:Phone_no>/',verifyVerificationNo.as_view()),
     path('resetpassword/<str:Phone_no>/',PasswordReset.as_view()),
     path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'), 
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  
 ]
