@@ -17,11 +17,12 @@ BaseUserManager => this class in Django is a base class provided by Django's aut
 class userAcountManager(BaseUserManager):
     def create_user(self,name,Phone_no,Otp,Otp_expre_at,Maximum_otp_try,Maximum_otp_out,password = None):
         if not name :
-            raise ValueError('user must have email addres')
+            raise ValueError('user must have name ')
         # Email = self.normalize_email(Email)
         user = self.model(name = name,Phone_no = Phone_no,Otp = Otp,Otp_expre_at = Otp_expre_at,Maximum_otp_try = Maximum_otp_try,Maximum_otp_out = Maximum_otp_out)
         user.set_password(password)
         user.save()
+        Wallet.objects.create(user=user,balance=0.0)
         return user
 
     def create_superuser(self,name,Phone_no,password = None):
@@ -51,10 +52,20 @@ class userAccountModel(AbstractBaseUser,PermissionsMixin):
     def __str__(self):
         return self.Phone_no
     
-class wallet(models.Model):
+class Wallet(models.Model):
     user=models.OneToOneField(userAccountModel,on_delete=models.CASCADE) 
-    balance=models.FloatField(max_length=8,default=0.0 )
+    balance=models.DecimalField(max_digits=8,default=0.0 ,decimal_places=2)
+
+class Transaction(models.Model):
+    TRANSACTION_TYPE_CHOICES= [
+        ('deposite','DEPOSITE'),
+        ('withdrawal','WITHDRAWAL')
+    ]
     
+    wallet=models.ForeignKey('Wallet',on_delete=models.CASCADE,related_name='transactions')
+    amount=models.DecimalField(max_digits=8,decimal_places=2)
+    transaction_type=models.CharField(max_length=10,choices=TRANSACTION_TYPE_CHOICES)
+    transaction_date=models.DateTimeField(default=timezone.now)
     
 
     

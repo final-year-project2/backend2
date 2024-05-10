@@ -168,3 +168,9 @@ class PasswordReset(generics.UpdateAPIView):
             else:
                 return Response('incorrect verification Number or password dose not match ',status=status.HTTP_400_BAD_REQUEST)
             
+            
+            
+            
+# class UpdateWallet(APIView):
+#     def post(self,request,wallet_id,format=None) :
+        
