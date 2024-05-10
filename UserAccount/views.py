@@ -2,7 +2,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import generics,status
 from .models import userAccountModel,Wallet
-from .serializer import UserAcountSerializer,TransactionSerializer
+from .serializer import UserAcountSerializer,TransactionSerializer,WalletSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from twilio.rest import Client
@@ -10,12 +10,13 @@ import random
 from datetime import timedelta
 from django.utils import timezone
 from django.conf import settings
-
+from rest_framework.generics import( ListAPIView,RetrieveAPIView)
 import os
 from dotenv import load_dotenv
 load_dotenv()
 from rest_framework.renderers import TemplateHTMLRenderer
 import logging
+
 
 
 logger =logging.getLogger(__name__)
@@ -206,6 +207,10 @@ class UpdateWallet(APIView):
             print(f"serialized{serializer.data}")
             return Response(serializer.data,status=status.HTTP_200_OK)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+class RetriveWalletInformations(RetrieveAPIView):
+    queryset=Wallet.objects.all()
+    serializer_class=WalletSerializer
+    lookup_field='user' 
         
         
     

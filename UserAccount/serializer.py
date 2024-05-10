@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import userAccountModel,Transaction
+from .models import userAccountModel,Transaction,Wallet
 from datetime import datetime,timedelta
 from django.conf import settings
 from twilio.rest import Client
@@ -67,13 +67,19 @@ from.models import Transaction
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
-        fields = ['id', 'amount', 'transaction_type']
+        fields = [ 'amount', 'transaction_type']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         # Corrected typo from 'balace' to 'balance'
         representation['wallet_balance'] = instance.wallet.balance
         return representation
+    
+class WalletSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wallet
+        fields = '__all__'
+
 
            
      

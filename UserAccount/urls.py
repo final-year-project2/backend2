@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (
 
 # from .views import MyTokenObtainPairView,CreateUserAcount,ActivateUserAcount, ApiDocsView,PasswordReset,RegenerateOtp,getMyOtp
 
-from .views import MyTokenObtainPairView,CreateUserAcount,ActivateUserAcount, PasswordReset,RegenerateOtp,getVerificationNo,verifyVerificationNo,ApiDocsView,UpdateWallet
+from .views import MyTokenObtainPairView,CreateUserAcount,ActivateUserAcount, PasswordReset,RegenerateOtp,getVerificationNo,verifyVerificationNo,ApiDocsView,UpdateWallet,RetriveWalletInformations
 
 from django.urls import path
 
@@ -18,6 +18,8 @@ urlpatterns = [
     # path('resetpassword/<int:pk>/',PasswordReset.as_view()),
     path('login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('updateWallet/<int:wallet_id>', UpdateWallet.as_view(), name='update_wallet'),
+    path('retriveWalletInfo/<int:user>', RetriveWalletInformations.as_view(), name='retrive_wallet_info'),
+    
     
     path('getVerification/<str:Phone_no>/',getVerificationNo.as_view()),
     path('verifyVerification/<str:Phone_no>/',verifyVerificationNo.as_view()),
