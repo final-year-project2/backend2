@@ -33,8 +33,11 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '[::1]',  # IPv6 localhost
-    '192.168.137.104' # Your IPv4 address
+    '192.168.137.181'# Your IPv4 address
 ]
+
+    
+
 
 
 
@@ -53,7 +56,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist'
 ]
 CORS_ALLOWED_ORIGINS = [
-    'http://192.168.137.28', 
+    '192.168.137.181', 
     # Replace with your IP address and port
     # Add more origins if needed
 ]
@@ -136,7 +139,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'final_year_project',
+        'NAME': 'final_year',
         'USER':'postgres',
         'PASSWORD': 'admin123',
         'HOST':'localhost',
@@ -190,6 +193,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+         'rest_framework.authentication.TokenAuthentication',
     )
 }
 AUTH_USER_MODEL = 'UserAccount.userAccountModel'
