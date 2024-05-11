@@ -1,8 +1,9 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from django.shortcuts import get_object_or_404
 from rest_framework import generics,status
-from .models import userAccountModel
-from .serializer import UserAcountSerializer
+from .models import userAccountModel,Wallet
+from .serializer import UserAcountSerializer,TransactionSerializer,WalletSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from twilio.rest import Client
@@ -11,10 +12,17 @@ from rest_framework.views import APIView
 from datetime import timedelta
 from django.utils import timezone
 from django.conf import settings
-
+from rest_framework.generics import( ListAPIView,RetrieveAPIView)
 import os
 from dotenv import load_dotenv
 load_dotenv()
+from rest_framework.renderers import TemplateHTMLRenderer
+import logging
+
+
+
+logger =logging.getLogger(__name__)
+
 
 
 
@@ -173,4 +181,50 @@ class PasswordReset(generics.UpdateAPIView):
                 return Response('password Successfully changed',status=status.HTTP_200_OK)
             else:
                 return Response('incorrect verification Number or password dose not match ',status=status.HTTP_400_BAD_REQUEST)
+<<<<<<< HEAD
 
+=======
+            
+            
+            
+            
+class UpdateWallet(APIView):
+    # renderer_classes = [TemplateHTMLRenderer]
+    logger.debug('message')
+    def post(self,request,*args, **kwargs) :
+        
+        wallet_id=kwargs['wallet_id']
+        print(f"walletid:{wallet_id}")
+        wallet = get_object_or_404(Wallet, id=wallet_id)
+        if not wallet:
+            return Response({"message":"user do not exists"},status=status.HTTP_400_BAD_REQUEST)
+        serializer = TransactionSerializer(data=request.data)
+
+        if serializer.is_valid():
+            transaction = serializer.save(wallet=wallet)
+            transaction.wallet=wallet
+            logger.debug(f"Validated data: {serializer.validated_data}")
+            
+            
+            if transaction.transaction_type == 'deposit':
+                wallet.balance+=transaction.amount
+            elif transaction.transaction_type == 'withdrawal':
+                if wallet.balance < transaction.amount:
+                    return Response({"message":"Insufficent amount"},status=status.HTTP_400_BAD_REQUEST)
+                wallet.balance-=transaction.amount
+            wallet.save()
+            print(f'updated wallet balance :{wallet.balance}')
+            
+            transaction.save()
+            print(f"serialized{serializer.data}")
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+class RetriveWalletInformations(RetrieveAPIView):
+    queryset=Wallet.objects.all()
+    serializer_class=WalletSerializer
+    lookup_field='user' 
+        
+        
+    
+        
+>>>>>>> 2c795d48cd5a38b64b527d533573c2b6866f05f8
