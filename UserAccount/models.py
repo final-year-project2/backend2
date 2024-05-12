@@ -16,21 +16,13 @@ BaseUserManager => this class in Django is a base class provided by Django's aut
 
 class userAcountManager(BaseUserManager):
     def create_user(self,name,Phone_no,Otp,Otp_expre_at,Maximum_otp_try,Maximum_otp_out,password = None):
-      try:  
+ 
         if not name :
             raise ValueError('user must have name ')
         # Email = self.normalize_email(Email)
         user = self.model(name = name,Phone_no = Phone_no,Otp = Otp,Otp_expre_at = Otp_expre_at,Maximum_otp_try = Maximum_otp_try,Maximum_otp_out = Maximum_otp_out)
         user.set_password(password)
         user.save()
-        
-     
-        
-        
-        
-        print(f"wallet is created for {user}")
-      except Exception as e:
-        print('error creatign wallet')
         return user
 
     def create_superuser(self,name,Phone_no,password = None):
@@ -51,7 +43,7 @@ class userAccountModel(AbstractBaseUser,PermissionsMixin):
     Maximum_otp_try = models.CharField(max_length = 2, default = settings.MAX_OTP_TRY)
     """Maximum_otp_out is used for when the user get otp for three times after that please try again after delay"""
     Maximum_otp_out =  models.DateTimeField(null = True,blank = True)
-    is_active = models.BooleanField(default = False)
+    is_active = models.BooleanField(default = True)
     is_staff = models.BooleanField(default = False)
     objects = userAcountManager()
     USERNAME_FIELD = 'Phone_no'
@@ -60,7 +52,8 @@ class userAccountModel(AbstractBaseUser,PermissionsMixin):
         # Call the "real" save method.
         super().save(*args, **kwargs)
         # Now, create a wallet for the user.
-        Wallet.objects.create(user=self, balance=0.0)
+        if not Wallet.objects.filter(user=self):
+         Wallet.objects.create(user=self, balance=0.0)
 
 
     def __str__(self):

@@ -12,9 +12,11 @@ from datetime import timedelta
 from django.utils import timezone
 from django.conf import settings
 from rest_framework.generics import( ListAPIView,RetrieveAPIView)
+
 import os
-from dotenv import load_dotenv
+from dotenv import load_dotenv 
 load_dotenv()
+
 from rest_framework.renderers import TemplateHTMLRenderer
 import logging
 
@@ -49,13 +51,50 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
         token['name'] = user.name
-        token['is_active_user'] = user.is_active
+        token['is_active_user'] = True
         token['is_staf_user'] = user.is_staff
-        token['is_superUser'] = user.is_superuser
+        token['is_superUser'] = user.is_superuser 
+        wallet=user.wallet
+        if wallet:
+            token['wallet_id'] = wallet.id
+        else:
+            token['wallet_id']=None
         token['can_add_user'] = user.has_perm('Can add user')
+        return token  
+    @classmethod 
+    def get_token(cls,user):
+        token = super().get_token(user)
+        wallet = user.wallet
+        print(f"walletid:{wallet.id}")
+        if wallet:
+            token['wallet_id'] = wallet.id
+        else:
+            token['wallet_id']=None
         return token
+    def validate(self, attrs):
+        data = super().validate(attrs)  # Corrected method call with parentheses
+        data.update({
+            'wallet_id': self.user.wallet.id if self.user.wallet else None,
+            'user_id':self.user.id
+        })
+        return data
+
+  
+    
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+    
+
+
+
+
+
+
+
+
+
+
+
 
 """this CreateUserAcount class is used to create user account"""
 class CreateUserAcount(generics.CreateAPIView):
