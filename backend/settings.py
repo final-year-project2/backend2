@@ -30,9 +30,15 @@ SECRET_KEY = 'django-insecure-bl*be%&5=uj&vvb0b#o9r!#mff%85$-ho((r&zi3^$34_r@a72
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '10.0.2.2',
-    '127.0.0.1'
+    'localhost',
+    '127.0.0.1',
+    '[::1]',  # IPv6 localhost
+    '192.168.137.181'# Your IPv4 address
 ]
+
+    
+
+
 
 
 # Application definition
@@ -45,8 +51,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'UserAccount',
+    'Product',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist'
+]
+CORS_ALLOWED_ORIGINS = [
+    '192.168.137.181', 
+    # Replace with your IP address and port
+    # Add more origins if needed
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -181,6 +193,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+         'rest_framework.authentication.TokenAuthentication',
     )
 }
 AUTH_USER_MODEL = 'UserAccount.userAccountModel'

@@ -48,6 +48,9 @@ class UserAcountSerializer(serializers.ModelSerializer):
         user.save()
         try:
 
+            
+
+
             account_sid = os.environ.get('ACCOUNT_SSID')
             auth_token =os.environ.get('AUTH_TOKEN') 
 
@@ -56,13 +59,27 @@ class UserAcountSerializer(serializers.ModelSerializer):
             client = Client(account_sid, auth_token)
             message = client.messages.create(
             body=f'Hello your Otp is {Otp}',
-            from_='+17603024639',
+            from_='+13109064102',
+
             to=f'+251{Phone_no}'
             )
             print(message.sid)
-        except:
+        except :
             print('some thing went wrong try again ')
         return user
+<<<<<<< HEAD
+from rest_framework import serializers
+
+# class SaveTicketSerializer(serializers.Serializer):
+#     title = serializers.CharField(max_length=100)
+#     description = serializers.CharField(max_length=500)
+#     number_of_tickets = serializers.IntegerField()
+#     prize_category = serializers.CharField(max_length=100)
+#     seller = serializers.CharField(max_length=100) # Adjust the field type as necessary
+#     image_1 = serializers.ImageField()
+#     image_2 = serializers.ImageField()
+#     image_3 = serializers.ImageField()
+=======
     def to_representation(self, instance):
         representatioin= super().to_representation(instance)
         representatioin['wallet_id']=instance.wallet.id
@@ -91,3 +108,4 @@ class WalletSerializer(serializers.ModelSerializer):
 
            
      
+>>>>>>> 2c795d48cd5a38b64b527d533573c2b6866f05f8

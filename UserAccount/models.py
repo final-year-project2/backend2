@@ -79,4 +79,3 @@ class Transaction(models.Model):
         return self.wallet
     
 
-    

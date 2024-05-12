@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from twilio.rest import Client
 import random
+from rest_framework.views import APIView
 from datetime import timedelta
 from django.utils import timezone
 from django.conf import settings
@@ -173,12 +174,17 @@ class getVerificationNo(generics.RetrieveAPIView):
         Otp = instance.Otp
         phone_no = instance.Phone_no
         try:
+
+            
+            
+            from_='+13109064102',
             account_sid = os.environ.get('ACCOUNT_SSID')
             auth_token = os.environ.get('AUTH_TOKEN')
             client = Client(account_sid, auth_token)
             message = client.messages.create(
             body=f'Hello your verification number is {Otp}',
-            from_='+17603024639',
+            from_='+13109064102',
+
             to=f'+251{phone_no}'
             )
             return Response('verification number send successfuly',status=status.HTTP_200_OK)
@@ -214,6 +220,9 @@ class PasswordReset(generics.UpdateAPIView):
                 return Response('password Successfully changed',status=status.HTTP_200_OK)
             else:
                 return Response('incorrect verification Number or password dose not match ',status=status.HTTP_400_BAD_REQUEST)
+<<<<<<< HEAD
+
+=======
             
             
             
@@ -257,3 +266,4 @@ class RetriveWalletInformations(RetrieveAPIView):
         
     
         
+>>>>>>> 2c795d48cd5a38b64b527d533573c2b6866f05f8
