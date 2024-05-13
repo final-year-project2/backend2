@@ -2,6 +2,9 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
+# from .views import MyTokenObtainPairView,CreateUserAcount,ActivateUserAcount,PasswordReset,RegenerateOtp,getVerificationNo,verifyVerificationNo
+ 
+
 # from .views import MyTokenObtainPairView,CreateUserAcount,ActivateUserAcount, ApiDocsView,PasswordReset,RegenerateOtp,getMyOtp
 
 from .views import MyTokenObtainPairView,CreateUserAcount,ActivateUserAcount, PasswordReset,RegenerateOtp,getVerificationNo,verifyVerificationNo,ApiDocsView,UpdateWallet,RetriveWalletInformations
