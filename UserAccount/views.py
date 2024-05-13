@@ -222,7 +222,7 @@ class UpdateWallet(APIView):
     # renderer_classes = [TemplateHTMLRenderer]
     logger.debug('message')
     def post(self,request,*args, **kwargs) :
-        
+    
         wallet_id=kwargs['wallet_id']
         print(f"walletid:{wallet_id}")
         wallet = get_object_or_404(Wallet, id=wallet_id)
@@ -252,7 +252,7 @@ class UpdateWallet(APIView):
 class RetriveWalletInformations(RetrieveAPIView):
     queryset=Wallet.objects.all()
     serializer_class=WalletSerializer
-    lookup_field='user' 
+    lookup_field='id' 
         
         
     

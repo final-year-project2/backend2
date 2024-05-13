@@ -16,9 +16,9 @@ urlpatterns = [
 
     # path('getVerification/<int:pk>/',getMyOtp.as_view()),
     # path('resetpassword/<int:pk>/',PasswordReset.as_view()),
-    path('login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'), 
     path('updateWallet/<int:wallet_id>', UpdateWallet.as_view(), name='update_wallet'),
-    path('retriveWalletInfo/<int:user_id>', RetriveWalletInformations.as_view(), name='retrive_wallet'),
+    path('retriveWalletInfo/<int:id>', RetriveWalletInformations.as_view(), name='retrive_wallet'),
     
     
     path('getVerification/<str:Phone_no>/',getVerificationNo.as_view()),
