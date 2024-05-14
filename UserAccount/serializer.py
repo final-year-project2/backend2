@@ -67,7 +67,7 @@ class UserAcountSerializer(serializers.ModelSerializer):
         except :
             print('some thing went wrong try again ')
         return user
-<<<<<<< HEAD
+
 from rest_framework import serializers
 
 # class SaveTicketSerializer(serializers.Serializer):
@@ -79,8 +79,7 @@ from rest_framework import serializers
 #     image_1 = serializers.ImageField()
 #     image_2 = serializers.ImageField()
 #     image_3 = serializers.ImageField()
-=======
-    def to_representation(self, instance):
+def to_representation(self, instance):
         representatioin= super().to_representation(instance)
         representatioin['wallet_id']=instance.wallet.id
         return representatioin
@@ -108,4 +107,3 @@ class WalletSerializer(serializers.ModelSerializer):
 
            
      
->>>>>>> 2c795d48cd5a38b64b527d533573c2b6866f05f8
