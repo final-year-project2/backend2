@@ -219,11 +219,7 @@ class PasswordReset(generics.UpdateAPIView):
                 instance.save()
                 return Response('password Successfully changed',status=status.HTTP_200_OK)
             else:
-                return Response('incorrect verification Number or password dose not match ',status=status.HTTP_400_BAD_REQUEST)
-<<<<<<< HEAD
-
-=======
-            
+                return Response('incorrect verification Number or password dose not match ',status=status.HTTP_400_BAD_REQUEST)  
             
             
             
@@ -266,4 +262,4 @@ class RetriveWalletInformations(RetrieveAPIView):
         
     
         
->>>>>>> 2c795d48cd5a38b64b527d533573c2b6866f05f8
+
