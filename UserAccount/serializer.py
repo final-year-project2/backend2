@@ -13,6 +13,8 @@ load_dotenv()
 import logging
 
 logger=logging.getLogger(__name__)
+from rest_framework import serializers
+
 class UserAcountSerializer(serializers.ModelSerializer):
     # password1 = serializers.CharField(write_only = True,min_length = 6)
     # password2 = serializers.CharField(write_only = True,min_length = 6)
@@ -67,8 +69,6 @@ class UserAcountSerializer(serializers.ModelSerializer):
         except :
             print('some thing went wrong try again ')
         return user
-<<<<<<< HEAD
-from rest_framework import serializers
 
 # class SaveTicketSerializer(serializers.Serializer):
 #     title = serializers.CharField(max_length=100)
@@ -79,7 +79,6 @@ from rest_framework import serializers
 #     image_1 = serializers.ImageField()
 #     image_2 = serializers.ImageField()
 #     image_3 = serializers.ImageField()
-=======
     def to_representation(self, instance):
         representatioin= super().to_representation(instance)
         representatioin['wallet_id']=instance.wallet.id
@@ -92,7 +91,7 @@ from.models import Transaction
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
-        fields = [ 'amount', 'transaction_type']
+        fields = [ 'amount', 'transaction_type','transaction_date']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -108,4 +107,3 @@ class WalletSerializer(serializers.ModelSerializer):
 
            
      
->>>>>>> 2c795d48cd5a38b64b527d533573c2b6866f05f8

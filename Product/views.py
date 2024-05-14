@@ -7,6 +7,8 @@ from rest_framework import status
 from .models import Seller, Ticket
 from .serializers import TicketSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
+
+from rest_framework.generics import (ListAPIView)
 class SaveTicketView(APIView):
     parser_classes = (MultiPartParser, FormParser)
     #permission_classes = [IsAuthenticated]
@@ -35,4 +37,12 @@ class BecomeSellerAPIView(APIView):
             return Response({'message': 'Seller registration successful'}, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        
+class RetriveTicketList(ListAPIView):
+    queryset=Ticket.objects.all()
+    serializer_class=TicketSerializer
+    lookup_field='prize_categories'
+    
+    
 

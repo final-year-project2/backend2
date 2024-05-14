@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+load_dotenv()
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
@@ -30,10 +34,10 @@ SECRET_KEY = 'django-insecure-bl*be%&5=uj&vvb0b#o9r!#mff%85$-ho((r&zi3^$34_r@a72
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '[::1]',  # IPv6 localhost
-    '192.168.137.181'# Your IPv4 address
+   
+    os.environ.get('AllOWED_HOST_MOBILE'),
+    os.environ.get('ALLOWED_HOST_WEB')
+ 
 ]
 
     
@@ -56,16 +60,11 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'dbbackup',  # django-dbbackup
 ]
-<<<<<<< HEAD
-DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
-DBBACKUP_STORAGE_OPTIONS = {'location': 'D:/final_year_db_backup'}
-=======
 CORS_ALLOWED_ORIGINS = [
     '192.168.137.181', 
     # Replace with your IP address and port
     # Add more origins if needed
 ]
->>>>>>> 28c49752aef2771565176ec7e07355664286002b
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
