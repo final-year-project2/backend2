@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from .models import Ticket
 from .models import Seller
 class TicketSerializer(serializers.ModelSerializer):
-    prize_categories = serializers.JSONField()
+    #prize_categories = serializers.JSONField()
     # image_1 = serializers.ImageField(max_length=None, use_url=True, required=False)
     # image_2 = serializers.ImageField(max_length=None, use_url=True, required=False)
     # image_3 = serializers.ImageField(max_length=None, use_url=True, required=False)
