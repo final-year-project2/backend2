@@ -13,6 +13,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 import json
 from rest_framework.generics import ListAPIView
+
 class SaveTicketView(APIView):
     parser_classes = (MultiPartParser, FormParser)
     #permission_classes = [IsAuthenticated]
@@ -41,10 +42,10 @@ class BecomeSellerAPIView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         
-class RetriveTicketList(ListAPIView):
-    queryset=Ticket.objects.all()
-    serializer_class=TicketSerializer
-    lookup_field='prize_categories'
+# class RetriveTicketList(ListAPIView):
+#     queryset=Ticket.objects.all()
+#     serializer_class=TicketSerializer
+#     lookup_field='prize_categories'
     
     
 

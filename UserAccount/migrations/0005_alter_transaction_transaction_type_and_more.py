@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('UserAccount', '0004_alter_wallet_balance_transaction'),
+        ('UserAccount', '0003_remove_useraccountmodel_email_and_more'),
     ]
 
     operations = [
