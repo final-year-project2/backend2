@@ -13,7 +13,6 @@ from datetime import timedelta
 from django.utils import timezone
 from django.conf import settings
 from rest_framework.generics import( ListAPIView,RetrieveAPIView)
-
 import os
 from dotenv import load_dotenv 
 load_dotenv()
@@ -85,17 +84,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
     
-
-
-
-
-
-
-
-
-
-
-
 
 """this CreateUserAcount class is used to create user account"""
 class CreateUserAcount(generics.CreateAPIView):
@@ -174,17 +162,12 @@ class getVerificationNo(generics.RetrieveAPIView):
         Otp = instance.Otp
         phone_no = instance.Phone_no
         try:
-
-            
-            
-            from_='+13109064102',
             account_sid = os.environ.get('ACCOUNT_SSID')
             auth_token = os.environ.get('AUTH_TOKEN')
             client = Client(account_sid, auth_token)
             message = client.messages.create(
             body=f'Hello your verification number is {Otp}',
             from_='+13109064102',
-
             to=f'+251{phone_no}'
             )
             return Response('verification number send successfuly',status=status.HTTP_200_OK)
@@ -220,12 +203,7 @@ class PasswordReset(generics.UpdateAPIView):
                 return Response('password Successfully changed',status=status.HTTP_200_OK)
             else:
                 return Response('incorrect verification Number or password dose not match ',status=status.HTTP_400_BAD_REQUEST)
-<<<<<<< HEAD
 
-=======
-            
-            
-            
             
 class UpdateWallet(APIView):
     # renderer_classes = [TemplateHTMLRenderer]
@@ -263,7 +241,3 @@ class RetriveWalletInformations(RetrieveAPIView):
     serializer_class=WalletSerializer
     lookup_field='user' 
         
-        
-    
-        
->>>>>>> 2c795d48cd5a38b64b527d533573c2b6866f05f8

@@ -33,7 +33,8 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '[::1]',  # IPv6 localhost
-    '192.168.137.181'# Your IPv4 address
+    '192.168.137.181',
+    '192.168.137.230'# Your IPv4 address
 ]
 
     
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
 ]
 CORS_ALLOWED_ORIGINS = [
     '192.168.137.181', 
+    '192.168.137.230'
     # Replace with your IP address and port
     # Add more origins if needed
 ]
@@ -139,11 +141,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'final_year',
-        'USER':'postgres',
-        'PASSWORD': 'admin123',
-        'HOST':'localhost',
-
+        'NAME': 'Netflix_backend_1',
+        'USER': 'postgres',
+        'PASSWORD': 'bdu1203346',
+        'HOST': 'localhost',
+        'PORT': 5432,
     }
 }
 

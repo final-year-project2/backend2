@@ -53,7 +53,7 @@ class userAccountModel(AbstractBaseUser,PermissionsMixin):
         super().save(*args, **kwargs)
         # Now, create a wallet for the user.
         if not Wallet.objects.filter(user=self):
-         Wallet.objects.create(user=self, balance=0.0)
+            Wallet.objects.create(user=self, balance=0.0)
 
 
     def __str__(self):
