@@ -1,26 +1,101 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from django.shortcuts import get_object_or_404
 from rest_framework import generics,status
-from .models import userAccountModel
-from .serializer import UserAcountSerializer
+from .models import userAccountModel,Wallet
+from .serializer import UserAcountSerializer,TransactionSerializer,WalletSerializer
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from twilio.rest import Client
 import random
+from rest_framework.views import APIView
 from datetime import timedelta
 from django.utils import timezone
 from django.conf import settings
+from rest_framework.generics import( ListAPIView,RetrieveAPIView)
+
+import os
+from dotenv import load_dotenv 
+load_dotenv()
+
+from rest_framework.renderers import TemplateHTMLRenderer
+import logging
+
+
+
+logger =logging.getLogger(__name__)
+
+
+
+
+
+
+
+
+
+
+class ApiDocsView(APIView):
+    
+    def get(self,request,*args,**kwargs):
+        api_endpoints =[
+            {
+                'path':"example/for/endpoint"
+            }
+        ]
+        return Response(api_endpoints)
+        
+    
+    
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
         token['name'] = user.name
-        token['is_active_user'] = user.is_active
+        token['is_active_user'] = True
         token['is_staf_user'] = user.is_staff
-        token['is_superUser'] = user.is_superuser
+        token['is_superUser'] = user.is_superuser 
+        wallet=user.wallet
+        if wallet:
+            token['wallet_id'] = wallet.id
+        else:
+            token['wallet_id']=None
         token['can_add_user'] = user.has_perm('Can add user')
+        return token  
+    @classmethod 
+    def get_token(cls,user):
+        token = super().get_token(user)
+        wallet = user.wallet
+        print(f"walletid:{wallet.id}")
+        if wallet:
+            token['wallet_id'] = wallet.id
+        else:
+            token['wallet_id']=None
         return token
+    def validate(self, attrs):
+        data = super().validate(attrs)  # Corrected method call with parentheses
+        data.update({
+            'wallet_id': self.user.wallet.id if self.user.wallet else None,
+            'user_id':self.user.id
+        })
+        return data
+
+  
+    
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+    
+
+
+
+
+
+
+
+
+
+
+
 
 """this CreateUserAcount class is used to create user account"""
 class CreateUserAcount(generics.CreateAPIView):
@@ -71,8 +146,8 @@ class RegenerateOtp(generics.UpdateAPIView):
             instance.Maximum_otp_try = Maximum_otp_try
         instance.save()
         try:
-            account_sid = 'AC3b149e8df13637611de9a595d354ca2c'
-            auth_token = 'd0961b8aa6ad93f5411c2528cb990341'
+            account_sid = os.environ.get('ACCOUNT_SSID')
+            auth_token = os.environ.get('AUTH_TOKEN')
             client = Client(account_sid, auth_token)
             message = client.messages.create(
             body=f'Hello your Otp is {otp}',
@@ -99,17 +174,22 @@ class getVerificationNo(generics.RetrieveAPIView):
         Otp = instance.Otp
         phone_no = instance.Phone_no
         try:
-            account_sid = 'AC3b149e8df13637611de9a595d354ca2c'
-            auth_token = 'd0961b8aa6ad93f5411c2528cb990341'
+
+            
+            
+            from_='+13109064102',
+            account_sid = os.environ.get('ACCOUNT_SSID')
+            auth_token = os.environ.get('AUTH_TOKEN')
             client = Client(account_sid, auth_token)
             message = client.messages.create(
             body=f'Hello your verification number is {Otp}',
-            from_='+13082223702',
+            from_='+13109064102',
+
             to=f'+251{phone_no}'
             )
-            return Response('verification no send successfuly',status=status.HTTP_200_OK)
-        except:
-            return Response('messaging service dose not work try again',status=status.HTTP_400_BAD_REQUEST)
+            return Response('verification number send successfuly',status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(f'messaging service dose not work try again {e}',status=status.HTTP_400_BAD_REQUEST)
         
 
 """
@@ -140,4 +220,50 @@ class PasswordReset(generics.UpdateAPIView):
                 return Response('password Successfully changed',status=status.HTTP_200_OK)
             else:
                 return Response('incorrect verification Number or password dose not match ',status=status.HTTP_400_BAD_REQUEST)
+<<<<<<< HEAD
+
+=======
             
+            
+            
+            
+class UpdateWallet(APIView):
+    # renderer_classes = [TemplateHTMLRenderer]
+    logger.debug('message')
+    def post(self,request,*args, **kwargs) :
+        
+        wallet_id=kwargs['wallet_id']
+        print(f"walletid:{wallet_id}")
+        wallet = get_object_or_404(Wallet, id=wallet_id)
+        if not wallet:
+            return Response({"message":"user do not exists"},status=status.HTTP_400_BAD_REQUEST)
+        serializer = TransactionSerializer(data=request.data)
+
+        if serializer.is_valid():
+            transaction = serializer.save(wallet=wallet)
+            transaction.wallet=wallet
+            logger.debug(f"Validated data: {serializer.validated_data}")
+            
+            
+            if transaction.transaction_type == 'deposit':
+                wallet.balance+=transaction.amount
+            elif transaction.transaction_type == 'withdrawal':
+                if wallet.balance < transaction.amount:
+                    return Response({"message":"Insufficent amount"},status=status.HTTP_400_BAD_REQUEST)
+                wallet.balance-=transaction.amount
+            wallet.save()
+            print(f'updated wallet balance :{wallet.balance}')
+            
+            transaction.save()
+            print(f"serialized{serializer.data}")
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+class RetriveWalletInformations(RetrieveAPIView):
+    queryset=Wallet.objects.all()
+    serializer_class=WalletSerializer
+    lookup_field='user' 
+        
+        
+    
+        
+>>>>>>> 2c795d48cd5a38b64b527d533573c2b6866f05f8

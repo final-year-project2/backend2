@@ -29,7 +29,16 @@ SECRET_KEY = 'django-insecure-bl*be%&5=uj&vvb0b#o9r!#mff%85$-ho((r&zi3^$34_r@a72
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '[::1]',  # IPv6 localhost
+    '192.168.137.181'# Your IPv4 address
+]
+
+    
+
+
 
 
 # Application definition
@@ -42,8 +51,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'UserAccount',
+    'Product',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist'
+]
+CORS_ALLOWED_ORIGINS = [
+    '192.168.137.181', 
+    # Replace with your IP address and port
+    # Add more origins if needed
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -51,7 +66,7 @@ REST_FRAMEWORK = {
     )
 }
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(seconds=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
@@ -124,9 +139,9 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'final_year_project',
+        'NAME': 'final_year',
         'USER':'postgres',
-        'PASSWORD': 'bdu1203346',
+        'PASSWORD': 'admin123',
         'HOST':'localhost',
 
     }
@@ -178,6 +193,34 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+         'rest_framework.authentication.TokenAuthentication',
     )
 }
 AUTH_USER_MODEL = 'UserAccount.userAccountModel'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'UserAccount': {  # Replace 'myapp' with your actual app name
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
