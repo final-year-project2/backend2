@@ -2,7 +2,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.shortcuts import get_object_or_404
 from rest_framework import generics,status
-from .models import userAccountModel,Wallet
+from .models import userAccountModel,Wallet,Transaction
 from .serializer import UserAcountSerializer,TransactionSerializer,WalletSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -202,14 +202,16 @@ class PasswordReset(generics.UpdateAPIView):
                 instance.save()
                 return Response('password Successfully changed',status=status.HTTP_200_OK)
             else:
-                return Response('incorrect verification Number or password dose not match ',status=status.HTTP_400_BAD_REQUEST)
 
+                return Response('incorrect verification Number or password dose not match ',status=status.HTTP_400_BAD_REQUEST)
+        
+            
             
 class UpdateWallet(APIView):
     # renderer_classes = [TemplateHTMLRenderer]
     logger.debug('message')
     def post(self,request,*args, **kwargs) :
-        
+    
         wallet_id=kwargs['wallet_id']
         print(f"walletid:{wallet_id}")
         wallet = get_object_or_404(Wallet, id=wallet_id)
@@ -239,5 +241,11 @@ class UpdateWallet(APIView):
 class RetriveWalletInformations(RetrieveAPIView):
     queryset=Wallet.objects.all()
     serializer_class=WalletSerializer
-    lookup_field='user' 
+    lookup_field='id' 
         
+class RetiveTransaction(ListAPIView):
+    queryset=Transaction.objects.all()
+    serializer_class=TransactionSerializer
+    lookup_field='wallet'
+        
+

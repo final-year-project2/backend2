@@ -2,8 +2,9 @@
 from rest_framework import serializers
 from django.core.exceptions import ValidationError
 from .models import Ticket
+from .models import Seller
 class TicketSerializer(serializers.ModelSerializer):
-    prize_categories = serializers.JSONField()
+    #prize_categories = serializers.JSONField()
     # image_1 = serializers.ImageField(max_length=None, use_url=True, required=False)
     # image_2 = serializers.ImageField(max_length=None, use_url=True, required=False)
     # image_3 = serializers.ImageField(max_length=None, use_url=True, required=False)
@@ -36,3 +37,7 @@ class TicketSerializer(serializers.ModelSerializer):
         MAX_FILE_SIZE = 10000000 # 10MB
         if image.size > MAX_FILE_SIZE:
             raise ValidationError("File size too big!")
+class SellerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Seller
+        fields = '__all__'
