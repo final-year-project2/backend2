@@ -34,9 +34,10 @@ SECRET_KEY = 'django-insecure-bl*be%&5=uj&vvb0b#o9r!#mff%85$-ho((r&zi3^$34_r@a72
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
+   
     os.environ.get('AllOWED_HOST_MOBILE'),
     os.environ.get('ALLOWED_HOST_WEB')
+ 
 ]
 
     
