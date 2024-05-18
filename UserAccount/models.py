@@ -56,8 +56,8 @@ class userAccountModel(AbstractBaseUser,PermissionsMixin):
             Wallet.objects.create(user=self, balance=0.0)
 
 
-    def __str__(self):
-        return self.Phone_no
+    # def __str__(self):
+    #     return self.Phone_no
     
 class Wallet(models.Model):
     user=models.OneToOneField(userAccountModel,on_delete=models.CASCADE) 
@@ -80,7 +80,7 @@ class Transaction(models.Model):
     transaction_type=models.CharField(max_length=10,choices=TRANSACTION_TYPE_CHOICES)
     transaction_from=models.CharField(max_length=20,choices=TRANSACTION_FROM,null=True)
     transaction_date=models.DateTimeField(default=timezone.now)
-    
+
     def __str__(self):
         return self.wallet.user.name
     

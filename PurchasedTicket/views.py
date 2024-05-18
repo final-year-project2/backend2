@@ -19,27 +19,34 @@ class PurchaseTicket(generics.ListCreateAPIView):
         serializer.is_valid(raise_exception=True)
 
         amount = 0  
-
+        wallet = get_object_or_404(Wallet, user=user)
+        if not wallet:
+            return Response({"message":"Wallet dose not exist"},status=status.HTTP_400_BAD_REQUEST)
+        
         # to get the trandsaction from the request
         transaction_from = request.data[0].get('Transaction_from')
         print(transaction_from)
         for ticket_data in serializer.validated_data:
+
+            # here to get the price from the database 
             # price = ticket_data['Ticket_id'].description
+            # i will coment bellow code latter
             price = 10
             amount += price
             ticket_data['User_id'] = user
-            wallet = get_object_or_404(Wallet, id=user)
-            print(wallet.balance)
-        WalletOwner, _ = Wallet.objects.get_or_create(user=user)
+
         if transaction_from == 'from_chapa':
-            TransactionUpdate(WalletOwner,amount,transaction_from)
+            TransactionUpdate(wallet,amount,transaction_from)
         if transaction_from == 'from_wallet':
-            if WalletOwner.balance >= amount:
-                WalletOwner.balance = WalletOwner.balance-amount
-                Wallet.save()
-                TransactionUpdate(WalletOwner,amount,transaction_from)
+            if wallet.balance >= amount:
+                wallet.balance = wallet.balance-amount
+                wallet.save()
+                TransactionUpdate(wallet,amount,transaction_from)
             else:
-                return Response({"message":"Your wallet havent Suficient amount"},status=status.HTTP_400_BAD_REQUEST)
+                return Response({"message":"Your wallet haven't Suficient amount"},status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"message":"peyment type not specified"},status=status.HTTP_400_BAD_REQUEST)
+        
 
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
@@ -49,6 +56,12 @@ class PurchaseTicket(generics.ListCreateAPIView):
         qs =  super().get_queryset()
         user = self.request.user
         return qs.filter(User_id = user)
+
+
+
+
+
+
 
         # transaction = Transaction(
         #     wallet=created,
