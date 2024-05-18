@@ -20,7 +20,7 @@ class SaveTicketView(APIView):
     def get(self, request, format=None):
         # Handle GET request if needed
         return Response({'message': 'GET method is allowed'}, status=status.HTTP_200_OK)
-    def post(self, request, format=None):
+def post(self, request, format=None):
         serializer = TicketSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -42,11 +42,7 @@ class BecomeSellerAPIView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         
-# class RetriveTicketList(ListAPIView):
-#     queryset=Ticket.objects.all()
-#     serializer_class=TicketSerializer
-#     lookup_field='prize_categories'
-    
+
     
 
 class CheckSellerView(APIView):
@@ -60,4 +56,14 @@ class CheckSellerView(APIView):
                 return Response({'message': 'User is not registered as a seller'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        
+## SENDING TICKET OBJECTS
+class RetriveTicketList(ListAPIView):
+    serializer_class=TicketSerializer
+    def get_queryset(self):
+        category=self.kwargs['prize_categories']
+        return Ticket.objects.filter(prize_categories=category)[:10]
+    
+    
        
