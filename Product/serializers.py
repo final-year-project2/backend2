@@ -10,7 +10,7 @@ class TicketSerializer(serializers.ModelSerializer):
     # image_3 = serializers.ImageField(max_length=None, use_url=True, required=False)
     class Meta:
         model = Ticket
-        fields = ['seller','title', 'description', 'number_of_tickets','prize_categories','image_1','image_2','image_3']
+        fields = ['seller','title', 'description', 'number_of_tickets','prize_categories','price_of_ticket','image_1','image_2','image_3']
 
     def validate_title(self, value):
         if not value:
@@ -37,7 +37,10 @@ class TicketSerializer(serializers.ModelSerializer):
         MAX_FILE_SIZE = 10000000 # 10MB
         if image.size > MAX_FILE_SIZE:
             raise ValidationError("File size too big!")
+# serializers.py
+
+
 class SellerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seller
-        fields = '__all__'
+        fields = ['user', 'image', 'successful_campaigns', 'date_created', 'rating']

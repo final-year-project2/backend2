@@ -66,7 +66,6 @@ class UserAcountSerializer(serializers.ModelSerializer):
         return representatioin
     
 
-
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
