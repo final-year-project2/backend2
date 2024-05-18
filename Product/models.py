@@ -2,9 +2,10 @@ from django.db import models
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.utils import timezone
+from UserAccount.models import userAccountModel
 #Create models here.
 class Seller(models.Model):
-    user = models.ForeignKey('UserAccount.userAccountModel', on_delete=models.CASCADE)
+    user = models.ForeignKey(userAccountModel, on_delete=models.CASCADE)
     image=models.ImageField(upload_to='profile_images/')
     successful_campaigns = models.IntegerField(default=0)  # Number of successful campaigns
     date_created = models.DateTimeField(auto_now_add=True)  # Timestamp of when the seller was created

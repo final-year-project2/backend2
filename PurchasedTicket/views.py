@@ -18,7 +18,7 @@ class PurchaseTicket(generics.ListCreateAPIView):
         serializer = self.get_serializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
 
-        amount = 0  
+        TotalPrice = 0  
         wallet = get_object_or_404(Wallet, user=user)
         if not wallet:
             return Response({"message":"Wallet dose not exist"},status=status.HTTP_400_BAD_REQUEST)
@@ -27,21 +27,18 @@ class PurchaseTicket(generics.ListCreateAPIView):
         transaction_from = request.data[0].get('Transaction_from')
         print(transaction_from)
         for ticket_data in serializer.validated_data:
-
             # here to get the price from the database 
-            # price = ticket_data['Ticket_id'].description
-            # i will coment bellow code latter
-            price = 10
-            amount += price
+            price = ticket_data['Ticket_id'].price_of_ticket
+            TotalPrice += int(price)
             ticket_data['User_id'] = user
 
         if transaction_from == 'from_chapa':
-            TransactionUpdate(wallet,amount,transaction_from)
+            TransactionUpdate(wallet,TotalPrice,transaction_from)
         if transaction_from == 'from_wallet':
-            if wallet.balance >= amount:
-                wallet.balance = wallet.balance-amount
+            if wallet.balance >= TotalPrice:
+                wallet.balance = wallet.balance-TotalPrice
                 wallet.save()
-                TransactionUpdate(wallet,amount,transaction_from)
+                TransactionUpdate(wallet,TotalPrice,transaction_from)
             else:
                 return Response({"message":"Your wallet haven't Suficient amount"},status=status.HTTP_400_BAD_REQUEST)
         else:

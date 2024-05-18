@@ -31,7 +31,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     os.environ.get('AllOWED_HOST_MOBILE'),
-    os.environ.get('ALLOWED_HOST_WEB')
+    os.environ.get('ALLOWED_HOST_WEB'),
+    '127.0.0.1'
 ]
 
     
