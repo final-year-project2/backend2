@@ -69,11 +69,9 @@ class UserAcountSerializer(serializers.ModelSerializer):
         except :
             print('some thing went wrong try again ')
         return user
-<<<<<<< HEAD
-=======
+
 
 from rest_framework import serializers
->>>>>>> 3bab07f34d7c0f61b411f0f3c58512e307b94c2d
 
 # class SaveTicketSerializer(serializers.Serializer):
 #     title = serializers.CharField(max_length=100)
@@ -83,19 +81,12 @@ from rest_framework import serializers
 #     seller = serializers.CharField(max_length=100) # Adjust the field type as necessary
 #     image_1 = serializers.ImageField()
 #     image_2 = serializers.ImageField()
-#     image_3 = serializers.ImageField()
-<<<<<<< HEAD
-    def to_representation(self, instance):
-=======
+#     image_3 = serializers.ImageField(
 def to_representation(self, instance):
->>>>>>> 3bab07f34d7c0f61b411f0f3c58512e307b94c2d
         representatioin= super().to_representation(instance)
         representatioin['wallet_id']=instance.wallet.id
         return representatioin
     
-    
-from rest_framework import serializers
-from.models import Transaction
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
