@@ -22,6 +22,5 @@ class Ticket(models.Model):
     image_2 = models.ImageField(upload_to='ticket_images/',null=True,blank=True)
     image_3 = models.ImageField(upload_to='ticket_images/',null=True,blank=True)# Store multiple images without specifying upload_to
 
-    def __str__(self):
-        return self.title
+
 
