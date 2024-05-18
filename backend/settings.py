@@ -13,10 +13,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
-from dotenv import load_dotenv
-load_dotenv()
-
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
@@ -34,14 +30,20 @@ SECRET_KEY = 'django-insecure-bl*be%&5=uj&vvb0b#o9r!#mff%85$-ho((r&zi3^$34_r@a72
 DEBUG = True
 
 ALLOWED_HOSTS = [
-   
     os.environ.get('AllOWED_HOST_MOBILE'),
-    os.environ.get('ALLOWED_HOST_WEB')
- 
+    os.environ.get('ALLOWED_HOST_WEB'),
+    '127.0.0.1'
 ]
 
     
 
+CORS_ALLOWED_ORIGINS = [
+    '192.168.137.181', 
+    '192.168.137.230',
+    '127.0.0.1'
+    # Replace with your IP address and port
+    # Add more origins if needed
+]
 
 
 
@@ -59,11 +61,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'dbbackup',  # django-dbbackup
-]
-CORS_ALLOWED_ORIGINS = [
-    '192.168.137.181', 
-    # Replace with your IP address and port
-    # Add more origins if needed
+    'Comments',
+    'PurchasedTicket'
+    
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -71,8 +71,8 @@ REST_FRAMEWORK = {
     )
 }
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(seconds=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=20),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "UPDATE_LAST_LOGIN": False,
@@ -144,11 +144,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'final_year',
-        'USER':'postgres',
-        'PASSWORD': 'admin123',
-        'HOST':'localhost',
-
+        'NAME': 'final_year_project1',
+        'USER': 'postgres',
+        'PASSWORD': 'bdu1203346',
+        'HOST': 'localhost',
+        'PORT': 5432,
     }
 }
 
@@ -198,7 +198,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     )
 }
 AUTH_USER_MODEL = 'UserAccount.userAccountModel'
