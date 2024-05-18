@@ -53,29 +53,35 @@ class userAccountModel(AbstractBaseUser,PermissionsMixin):
         super().save(*args, **kwargs)
         # Now, create a wallet for the user.
         if not Wallet.objects.filter(user=self):
-         Wallet.objects.create(user=self, balance=0.0)
+            Wallet.objects.create(user=self, balance=0.0)
 
 
-    def __str__(self):
-        return self.Phone_no
+    # def __str__(self):
+    #     return self.Phone_no
     
 class Wallet(models.Model):
     user=models.OneToOneField(userAccountModel,on_delete=models.CASCADE) 
     balance=models.DecimalField(max_digits=8,default=0.0 ,decimal_places=2)
-    def __str__(self):
-        return f"{self.id}'s wallet"
+    
+    # def __str__(self):
+    #     return f"{self.id}'s wallet"
 
 class Transaction(models.Model):
     TRANSACTION_TYPE_CHOICES= [
         ('deposit','DEPOSIT'),
         ('withdrawal','WITHDRAWAL')
     ]
-    
+    TRANSACTION_FROM= [
+        ('from_chapa','From chapa'),
+        ('from_wallet','From your wallet')
+    ]
     wallet=models.ForeignKey(Wallet,on_delete=models.CASCADE,related_name='transactions')
     amount=models.DecimalField(max_digits=8,decimal_places=2)
     transaction_type=models.CharField(max_length=10,choices=TRANSACTION_TYPE_CHOICES)
+    transaction_from=models.CharField(max_length=20,choices=TRANSACTION_FROM,null=True)
     transaction_date=models.DateTimeField(default=timezone.now)
+
     def __str__(self):
-        return self.wallet
+        return self.wallet.user.name
     
 
