@@ -13,10 +13,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
-from dotenv import load_dotenv
-load_dotenv()
-
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
@@ -34,11 +30,11 @@ SECRET_KEY = 'django-insecure-bl*be%&5=uj&vvb0b#o9r!#mff%85$-ho((r&zi3^$34_r@a72
 DEBUG = True
 
 ALLOWED_HOSTS = [
-   
-    os.environ.get('AllOWED_HOST_MOBILE'),
-    os.environ.get('ALLOWED_HOST_WEB')
- 
-]
+    'localhost',
+    '127.0.0.1',
+    '[::1]',  # IPv6 localhost
+    '10.42.0.55'# Your IPv4 address
+       ]
 
     
 
@@ -57,11 +53,10 @@ INSTALLED_APPS = [
     'UserAccount',
     'Product',
     'rest_framework',
-    'rest_framework_simplejwt.token_blacklist',
-    'dbbackup',  # django-dbbackup
+    'rest_framework_simplejwt.token_blacklist'
 ]
 CORS_ALLOWED_ORIGINS = [
-    '192.168.137.181', 
+    '10.42.0.55', 
     # Replace with your IP address and port
     # Add more origins if needed
 ]
