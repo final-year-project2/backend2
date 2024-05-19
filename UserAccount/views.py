@@ -13,6 +13,7 @@ from datetime import timedelta
 from django.utils import timezone
 from django.conf import settings
 from rest_framework.generics import( ListAPIView,RetrieveAPIView)
+
 import os
 from dotenv import load_dotenv 
 load_dotenv()
@@ -84,6 +85,17 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
     
+
+
+
+
+
+
+
+
+
+
+
 
 """this CreateUserAcount class is used to create user account"""
 class CreateUserAcount(generics.CreateAPIView):
@@ -162,12 +174,17 @@ class getVerificationNo(generics.RetrieveAPIView):
         Otp = instance.Otp
         phone_no = instance.Phone_no
         try:
+
+            
+            
+            from_='+13109064102',
             account_sid = os.environ.get('ACCOUNT_SSID')
             auth_token = os.environ.get('AUTH_TOKEN')
             client = Client(account_sid, auth_token)
             message = client.messages.create(
             body=f'Hello your verification number is {Otp}',
             from_='+13109064102',
+
             to=f'+251{phone_no}'
             )
             return Response('verification number send successfuly',status=status.HTTP_200_OK)
