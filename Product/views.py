@@ -20,7 +20,7 @@ class SaveTicketView(APIView):
     def get(self, request, format=None):
         # Handle GET request if needed
         return Response({'message': 'GET method is allowed'}, status=status.HTTP_200_OK)
-def post(self, request, format=None):
+    def post(self, request, format=None):
         serializer = TicketSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()

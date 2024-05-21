@@ -8,6 +8,14 @@ from UserAccount.models import Wallet,Transaction
 from Product.models import Ticket
 from .TransactionUpdateMixin import TransactionUpdate
 from django.shortcuts import get_object_or_404
+from Product.models import Ticket
+import time
+
+from sse_wrapper.views import EventStreamView
+
+
+ticketId=''
+
 class PurchaseTicket(generics.ListCreateAPIView):
     queryset = PurchasedTicket.objects.all()
     permission_classes = [permissions.IsAuthenticated]
@@ -46,6 +54,10 @@ class PurchaseTicket(generics.ListCreateAPIView):
         
 
         self.perform_create(serializer)
+        ticket_id=ticket_data['Ticket_id']
+        ticketId=ticket_data['Ticket_id']
+        number_of_left_tickets= Ticket.objects.get(id=ticket_id)- PurchasedTicket.objects.filter(Ticket_id=ticket_id).count()
+        
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
@@ -58,13 +70,31 @@ class PurchaseTicket(generics.ListCreateAPIView):
 
 
 
+class TicketCountSseView(EventStreamView):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ticket_id = kwargs.get('ticket_id')  # Assuming ticket_id is passed as a keyword argument
 
-
-        # transaction = Transaction(
-        #     wallet=created,
-        #     amount=amount,
-        #     transaction_type='withdrawal',
-        #     transaction_from = 'from_chapa',# Assuming deposit; change as needed
-        #     transaction_date=timezone.now()  # Ensure timezone.now is imported
-        # )
-        # transaction.save()
+    def iterator(self):
+        last_count = None
+        while True:
+            try:
+                # Optimize by fetching the required data once
+                ticket = Ticket.objects.get(id=self.ticket_id)
+                purchased_tickets = PurchasedTicket.objects.filter(ticket_id=self.ticket_id)
+                
+                current_count = ticket.number_of_tickets - purchased_tickets.count()
+                
+                if current_count!= last_count:
+                    yield {
+                        "event": "TicketCount",
+                        "ticket_left": current_count,
+                        "number_of_buyer": purchased_tickets.count(),
+                    }
+                    last_count = current_count
+                
+                # Consider using a more efficient method to wait for changes, e.g., via a background task
+                time.sleep(1)
+            except Exception as e:
+                print(f"An error occurred: {e}")
+                break  # Exit the loop on error

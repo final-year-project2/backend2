@@ -63,9 +63,11 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'dbbackup',  # django-dbbackup
     'Comments',
-    'PurchasedTicket'
+    'PurchasedTicket',
+    'sse_wrapper'
     
 ]
+SSE_BACKEND_CLASS = 'sse_wrapper.backends.redis.RedisBackend'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -145,7 +147,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'final_year_project',
+        'NAME': 'final_year_project2',
         'USER': 'postgres',
         'PASSWORD': 'admin123',
         'HOST': 'localhost',

@@ -261,7 +261,7 @@ class RetriveWalletInformations(RetrieveAPIView):
     lookup_field='id' 
         
 class RetiveTransaction(ListAPIView):
-    queryset=Transaction.objects.all()
+    queryset=Transaction.objects.all().order_by('-transaction_date')
     serializer_class=TransactionSerializer
     lookup_field='wallet'
     
