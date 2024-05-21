@@ -13,10 +13,8 @@ BaseUserManager => this class in Django is a base class provided by Django's aut
 """
 
 
-
 class userAcountManager(BaseUserManager):
     def create_user(self,name,Phone_no,Otp,Otp_expre_at,Maximum_otp_try,Maximum_otp_out,password = None):
- 
         if not name :
             raise ValueError('user must have name ')
         # Email = self.normalize_email(Email)
@@ -38,7 +36,7 @@ class userAccountModel(AbstractBaseUser,PermissionsMixin):
     name = models.CharField(max_length = 50, null = False, blank = False)
     # Email = models.EmailField(max_length = 50,unique = True , null = True, blank = True)
     Phone_no = models.CharField(max_length = 13,unique = True, null = False, blank = False)
-    Otp = models.CharField(max_length = 4)
+    Otp = models.CharField(max_length = 4, null=True)
     Otp_expre_at = models.DateTimeField(null = True,blank = True)
     Maximum_otp_try = models.CharField(max_length = 2, default = settings.MAX_OTP_TRY)
     """Maximum_otp_out is used for when the user get otp for three times after that please try again after delay"""

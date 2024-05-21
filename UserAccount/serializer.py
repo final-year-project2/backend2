@@ -5,10 +5,9 @@ from django.conf import settings
 from twilio.rest import Client
 import random
 from django.utils import timezone
-    
 from rest_framework import serializers
-from.models import Transaction
-from rest_framework import serializers
+
+
 import os
 # from dotenv import load_dotenv
 # load_dotenv()
@@ -60,6 +59,17 @@ class UserAcountSerializer(serializers.ModelSerializer):
         except :
             print('some thing went wrong try again ')
         return user
+
+
+# class SaveTicketSerializer(serializers.Serializer):
+#     title = serializers.CharField(max_length=100)
+#     description = serializers.CharField(max_length=500)
+#     number_of_tickets = serializers.IntegerField()
+#     prize_category = serializers.CharField(max_length=100)
+#     seller = serializers.CharField(max_length=100) # Adjust the field type as necessary
+#     image_1 = serializers.ImageField()
+#     image_2 = serializers.ImageField()
+#     image_3 = serializers.ImageField()
     def to_representation(self, instance):
         representatioin= super().to_representation(instance)
         representatioin['wallet_id']=instance.wallet.id
