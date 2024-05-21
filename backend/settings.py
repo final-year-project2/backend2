@@ -32,8 +32,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     os.environ.get('AllOWED_HOST_MOBILE'),
     os.environ.get('ALLOWED_HOST_WEB'),
-    '127.0.0.1',
-    '10.0.2.2'
+    '192.168.137.252'
 ]
 
     
@@ -41,7 +40,8 @@ ALLOWED_HOSTS = [
 CORS_ALLOWED_ORIGINS = [
     '192.168.137.181', 
     '192.168.137.230',
-    '127.0.0.1'
+
+    '192.168.137.252'
     # Replace with your IP address and port
     # Add more origins if needed
 ]
@@ -149,7 +149,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'final_year_project2',
         'USER': 'postgres',
-        'PASSWORD': 'admin123',
+        'PASSWORD': 'bdu1203346',
         'HOST': 'localhost',
         'PORT': 5432,
     }

@@ -10,11 +10,6 @@ urlpatterns = [
     path('become_seller/',BecomeSellerAPIView.as_view(), name='become_seller'),
     path('check_seller/', CheckSellerView.as_view(), name='check_seller'),
     path('ticket-list/<str:prize_categories>', RetriveTicketList.as_view(), name='ticket-list'),
-    
-    
-   
-
-    # Add more URL patterns as needed
 
 ]
 
