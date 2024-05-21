@@ -68,10 +68,10 @@ class Transaction(models.Model):
         ('deposit','DEPOSIT'),
         ('withdrawal','WITHDRAWAL')
     ]
-    
     wallet=models.ForeignKey(Wallet,on_delete=models.CASCADE,related_name='transactions')
     amount=models.DecimalField(max_digits=8,decimal_places=2)
     transaction_type=models.CharField(max_length=10,choices=TRANSACTION_TYPE_CHOICES)
+    transaction_from=models.CharField(max_length=10,null=True)
     transaction_date=models.DateTimeField(default=timezone.now)
     def __str__(self):
         return self.wallet
