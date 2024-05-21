@@ -13,10 +13,8 @@ BaseUserManager => this class in Django is a base class provided by Django's aut
 """
 
 
-
 class userAcountManager(BaseUserManager):
     def create_user(self,name,Phone_no,Otp,Otp_expre_at,Maximum_otp_try,Maximum_otp_out,password = None):
- 
         if not name :
             raise ValueError('user must have name ')
         # Email = self.normalize_email(Email)
