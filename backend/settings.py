@@ -32,7 +32,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     os.environ.get('AllOWED_HOST_MOBILE'),
     os.environ.get('ALLOWED_HOST_WEB'),
-    '192.168.137.94'
+    '192.168.137.9'
 ]
 
     
