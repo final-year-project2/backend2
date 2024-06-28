@@ -32,7 +32,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     os.environ.get('AllOWED_HOST_MOBILE'),
     os.environ.get('ALLOWED_HOST_WEB'),
-    '192.168.137.252'
+    '127.0.0.1',
+    '10.0.2.2'
 ]
 
     
@@ -51,6 +52,8 @@ CORS_ALLOWED_ORIGINS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -64,15 +67,30 @@ INSTALLED_APPS = [
     'dbbackup',  # django-dbbackup
     'Comments',
     'PurchasedTicket',
-    'sse_wrapper'
     
 ]
-SSE_BACKEND_CLASS = 'sse_wrapper.backends.redis.RedisBackend'
+ASGI_APPLICATION = 'backend.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
+
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 1, 
+    
+    
+    
+    
 }
+
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=20),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
@@ -138,18 +156,18 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.wsgi.application'
+# WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+# https://docs.djangoproject.com/en/5.0/ref/settings/#databasese
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'final_year_project2',
+        'NAME': 'final_year_project3',
         'USER': 'postgres',
-        'PASSWORD': 'bdu1203346',
+        'PASSWORD': 'admin123',
         'HOST': 'localhost',
         'PORT': 5432,
     }

@@ -10,15 +10,16 @@ from .TransactionUpdateMixin import TransactionUpdate
 from django.shortcuts import get_object_or_404
 from Product.models import Ticket
 import time
-
-from sse_wrapper.views import EventStreamView
+from django.http import StreamingHttpResponse
+import json
+# from sse_wrapper.views import EventStreamView
 
 
 ticketId=''
 
 class PurchaseTicket(generics.ListCreateAPIView):
     queryset = PurchasedTicket.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
     serializer_class = PurchasedTicketSerializer
     
     def create(self, request, *args, **kwargs):
@@ -41,23 +42,24 @@ class PurchaseTicket(generics.ListCreateAPIView):
             TotalPrice += int(price)
             ticket_data['User_id'] = user
 
-        if transaction_from == 'from_chapa':
+        if transaction_from=="from_chapa":
             TransactionUpdate(wallet,TotalPrice,transaction_from)
-        if transaction_from == 'from_wallet':
+        elif transaction_from == 'from_wallet':
             if wallet.balance >= TotalPrice:
                 wallet.balance = wallet.balance-TotalPrice
                 wallet.save()
+                
                 TransactionUpdate(wallet,TotalPrice,transaction_from)
             else:
                 return Response({"message":"Your wallet haven't Suficient amount"},status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({"message":"peyment type not specified"},status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message":"payment type not specified"},status=status.HTTP_400_BAD_REQUEST)
         
 
         self.perform_create(serializer)
-        ticket_id=ticket_data['Ticket_id']
-        ticketId=ticket_data['Ticket_id']
-        number_of_left_tickets= Ticket.objects.get(id=ticket_id)- PurchasedTicket.objects.filter(Ticket_id=ticket_id).count()
+      
+    
+       
         
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -80,31 +82,51 @@ class PurchasedTicketNo(generics.ListAPIView):
 
 
 
-class TicketCountSseView(EventStreamView):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.ticket_id = kwargs.get('ticket_id')  # Assuming ticket_id is passed as a keyword argument
 
-    def iterator(self):
-        last_count = None
-        while True:
-            try:
-                # Optimize by fetching the required data once
-                ticket = Ticket.objects.get(id=self.ticket_id)
-                purchased_tickets = PurchasedTicket.objects.filter(ticket_id=self.ticket_id)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# event_queue=[]
+# def stream_updates(request):
+
+#     def iterator():
+  
+#         while True:
+#                 ticket = Ticket.objects.get(id=3)
+#                 purchased_tickets = PurchasedTicket.objects.filter(Ticket_id= 3)
                 
-                current_count = ticket.number_of_tickets - purchased_tickets.count()
+#                 current_count = int(ticket.number_of_tickets) - purchased_tickets.count()
+#                 ##NUMBER OF PEOPLE THAT BUT THE TICKET MEAN NUMBER OF USER INSTANCE IN TEH PURCHASED TICKET
+#                 unique_buyers_count = PurchasedTicket.objects.filter(Ticket_id=3).values('User_id').distinct().count()
+
+            
+#                 event_queue.append(str(current_count))
+#                 print(current_count)
                 
-                if current_count!= last_count:
-                    yield {
-                        "event": "TicketCount",
-                        "ticket_left": current_count,
-                        "number_of_buyer": purchased_tickets.count(),
-                    }
-                    last_count = current_count
+#                 if event_queue:
+#                    event= event_queue.pop(0)
+#                    yield f"data:{event, unique_buyers_count}\n\n"
+#                 else:
+#                     time.sleep(1)
+    
+#     return StreamingHttpResponse(iterator(),content_type="text/event-stream")
+               
+                    
+        
+              
                 
-                # Consider using a more efficient method to wait for changes, e.g., via a background task
-                time.sleep(1)
-            except Exception as e:
-                print(f"An error occurred: {e}")
-                break  # Exit the loop on error
+                 

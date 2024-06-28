@@ -15,7 +15,7 @@ class Seller(models.Model):
         return self.user.name
 
 class Ticket(models.Model):
-    seller = models.ForeignKey(Seller, on_delete=models.CASCADE,null=True)
+    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
     title = models.TextField()
     description = models.TextField()  # Change to TextField for unlimited length
     number_of_tickets = models.CharField()
