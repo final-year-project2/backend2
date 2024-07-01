@@ -32,7 +32,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     os.environ.get('AllOWED_HOST_MOBILE'),
     os.environ.get('ALLOWED_HOST_WEB'),
-    '192.168.137.252'
+    '192.168.137.3'
 ]
 
     
@@ -40,8 +40,7 @@ ALLOWED_HOSTS = [
 CORS_ALLOWED_ORIGINS = [
     '192.168.137.181', 
     '192.168.137.230',
-
-    '192.168.137.252'
+    '192.168.137.3'
     # Replace with your IP address and port
     # Add more origins if needed
 ]
