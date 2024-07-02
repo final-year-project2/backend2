@@ -12,4 +12,3 @@ urlpatterns = [
     path('ticket-list/<str:prize_categories>/', RetriveTicketList.as_view(), name='ticket-list'),
 
 ]
-

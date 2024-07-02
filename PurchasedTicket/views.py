@@ -37,7 +37,9 @@ class PurchaseTicket(generics.ListCreateAPIView):
         transaction_from = request.data[0].get('Transaction_from')
         print(transaction_from)
         for ticket_data in serializer.validated_data:
-            # here to get the price from the database 
+            i = 0 
+            transaction_from = request.data[i].get('Transaction_from')
+            i +=1
             price = ticket_data['Ticket_id'].price_of_ticket
             TotalPrice += int(price)
             ticket_data['User_id'] = user
@@ -79,7 +81,6 @@ class PurchasedTicketNo(generics.ListAPIView):
         print(TicketId)
         qs =  super().get_queryset()
         return qs.filter(Ticket_id = TicketId)
-
 
 
 

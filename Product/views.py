@@ -21,7 +21,7 @@ from rest_framework.pagination import PageNumberPagination
 
 class SaveTicketView(APIView):
     parser_classes = (MultiPartParser, FormParser)
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     def get(self, request, format=None):
         # Handle GET request if needed
         return Response({'message': 'GET method is allowed'}, status=status.HTTP_200_OK)

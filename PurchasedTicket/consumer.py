@@ -8,6 +8,7 @@ class PurchasedTicketConsumer(AsyncWebsocketConsumer):
         self.room_group_name = f'ticket_updates_{self.scope["url_route"]["kwargs"]["seller_id"]}'
         
         print(self.scope["url_route"]["kwargs"]["seller_id"])
+        
       #   self.room_group_name = f'ticket_updates_1'
         await self.channel_layer.group_add(
             self.room_group_name,

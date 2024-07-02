@@ -61,5 +61,5 @@ class TicketSerializer(serializers.ModelSerializer):
 class SellerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seller
-        fields = ['user', 'image', 'successful_campaigns', 'date_created', 'rating']
+        fields = ['user', 'image', 'successful_campaigns', 'rating']
         
