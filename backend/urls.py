@@ -8,6 +8,7 @@ urlpatterns = [
     path('product/',include('Product.urls')),
     path('ticket/', include('PurchasedTicket.urls')),
     path('comment/', include('Comments.urls')),
+    path('adminOperation/', include('AdminDashboardOperation.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

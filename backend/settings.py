@@ -32,16 +32,18 @@ DEBUG = True
 ALLOWED_HOSTS = [
     os.environ.get('AllOWED_HOST_MOBILE'),
     os.environ.get('ALLOWED_HOST_WEB'),
-    '192.168.137.3'
+    '127.0.0.1'
 ]
 
-    
+CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOWED_ORIGINS = [
-    '192.168.137.181', 
-    '192.168.137.230',
-    '192.168.137.3'
-    # Replace with your IP address and port
+    'http://192.168.137.181', 
+    'http://192.168.137.230',
+    'http://10.161.165.185',
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:8000",
+    # Replace with your IP address and portip
     # Add more origins if needed
 ]
 
@@ -58,11 +60,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'UserAccount',
     'Product',
+    'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'dbbackup',  # django-dbbackup
     'Comments',
-    'PurchasedTicket'
+    'PurchasedTicket',
+    'AdminDashboardOperation'
     
 ]
 REST_FRAMEWORK = {
@@ -108,6 +112,7 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -199,7 +204,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
 }
 AUTH_USER_MODEL = 'UserAccount.userAccountModel'
 

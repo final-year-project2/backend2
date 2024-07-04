@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin,BaseUserManager,User
 from django.utils import timezone
 from django.conf import settings
-
 """
 AbstractBaseUser => that provides a foundation for creating custom user models with additional fields and functionalities.
 
@@ -11,8 +10,6 @@ PermissionsMixin => is a mixin class provided by Django that can be used in conj
 BaseUserManager => this class in Django is a base class provided by Django's authentication system for creating custom user.It provides a set of methods and attributes that help with managing user creation and manipulation
 
 """
-
-
 class userAcountManager(BaseUserManager):
     def create_user(self,name,Phone_no,Otp,Otp_expre_at,Maximum_otp_try,Maximum_otp_out,password = None):
         if not name :
@@ -51,7 +48,7 @@ class userAccountModel(AbstractBaseUser,PermissionsMixin):
         super().save(*args, **kwargs)
         # Now, create a wallet for the user.
         if not Wallet.objects.filter(user=self):
-         Wallet.objects.create(user=self, balance=0.0)
+            Wallet.objects.create(user=self, balance=0.0)
 
 
     def __str__(self):
@@ -72,8 +69,11 @@ class Transaction(models.Model):
     amount=models.DecimalField(max_digits=8,decimal_places=2)
     transaction_type=models.CharField(max_length=10,choices=TRANSACTION_TYPE_CHOICES)
     transaction_from=models.CharField(max_length=10,null=True)
-    transaction_date=models.DateTimeField(default=timezone.now)
+    transaction_date=  models.IntegerField()
+    def save(self, *args, **kwargs):
+        self.transaction_date = timezone.now().day
+        super().save(*args, **kwargs)
     def __str__(self):
-        return self.wallet
+        return self.transaction_type
     
 

@@ -102,7 +102,9 @@ class CreateUserAcount(generics.CreateAPIView):
     queryset = userAccountModel.objects.all()
     serializer_class = UserAcountSerializer
 
-
+class UserList(generics.ListAPIView):
+    queryset = userAccountModel.objects.all()
+    serializer_class = UserAcountSerializer
 """this ActivateUserAcount class used for activate user account"""
 class ActivateUserAcount(generics.UpdateAPIView):
     queryset = userAccountModel.objects.all()
@@ -266,7 +268,9 @@ class RetiveTransaction(ListAPIView):
     serializer_class=TransactionSerializer
     lookup_field='wallet'
     
-    
+class RetiveAllTransaction(ListAPIView):
+    queryset=Transaction.objects.all()
+    serializer_class=TransactionSerializer 
 
     
         

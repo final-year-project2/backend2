@@ -13,7 +13,9 @@ from .views import (MyTokenObtainPairView,CreateUserAcount,ActivateUserAcount
                     verifyVerificationNo,
                     ApiDocsView,UpdateWallet
                     ,RetriveWalletInformations,
-                    RetiveTransaction
+                    RetiveTransaction,
+                    UserList,
+                    RetiveAllTransaction
                     )
 
 from django.urls import path
@@ -21,6 +23,7 @@ from django.urls import path
 urlpatterns = [
     path('', ApiDocsView.as_view(),name='api-docs'),
     path('create/',CreateUserAcount.as_view()),
+    path('list/',UserList.as_view()),
     path('activate/<int:pk>/',ActivateUserAcount.as_view()),
     path('otp/regenerate/<int:pk>/',RegenerateOtp.as_view()),
 
@@ -31,7 +34,7 @@ urlpatterns = [
     path('retriveWalletInfo/<int:id>', RetriveWalletInformations.as_view(), name='retrive_wallet'),
     
     path('retiveTransactionInfo/<int:wallet>',RetiveTransaction.as_view(),name='transaction_info'),
-    
+    path('RetiveAllTransaction/',RetiveAllTransaction.as_view(),name='transaction_info'),
     
     path('getVerification/<str:Phone_no>/',getVerificationNo.as_view()),
     path('verifyVerification/<str:Phone_no>/',verifyVerificationNo.as_view()),

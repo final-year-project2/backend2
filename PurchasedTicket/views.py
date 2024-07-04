@@ -26,7 +26,7 @@ class PurchaseTicket(generics.ListCreateAPIView):
         
         # to get the trandsaction from the request
         transaction_from = request.data[0].get('Transaction_from')
-        print(transaction_from)
+        
         for ticket_data in serializer.validated_data:
             i = 0 
             transaction_from = request.data[i].get('Transaction_from')

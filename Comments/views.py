@@ -13,7 +13,6 @@ class TicketComment(generics.ListCreateAPIView):
 
 
 
-
 class SingleTicketComment(generics.ListCreateAPIView):
     queryset =  TicketCommentModel.objects.all()
     serializer_class = TicketCommentSerializer
