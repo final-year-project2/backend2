@@ -30,16 +30,41 @@ SECRET_KEY = 'django-insecure-bl*be%&5=uj&vvb0b#o9r!#mff%85$-ho((r&zi3^$34_r@a72
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    os.environ.get('AllOWED_HOST_MOBILE'),
-    os.environ.get('ALLOWED_HOST_WEB'),
-    '127.0.0.1'
+    'localhost',
+    '127.0.0.1',
+    '[::1]',  # IPv6 localhost
+    '192.168.12.100'# Your IPv4 address'
 ]
 
-    
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'Product': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+  
 
 CORS_ALLOWED_ORIGINS = [
-    '192.168.137.181', 
-    '192.168.137.230',
+    '192.168.12.100', 
     '127.0.0.1'
     # Replace with your IP address and port
     # Add more origins if needed
@@ -57,6 +82,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'UserAccount',
+    'django_q',
     'Product',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
@@ -65,6 +91,18 @@ INSTALLED_APPS = [
     'PurchasedTicket'
     
 ]
+Q_CLUSTER = {
+    'name': 'DjangoQ',
+    'workers': 4,
+    'recycle': 500,
+    'timeout': 60,
+    'compress': True,
+    'save_limit': 250,
+    'queue_limit': 500,
+    'label': 'DjangoQ',
+    'orm': 'default',
+}
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -144,9 +182,9 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'final_year_project1',
+        'NAME': 'final_year',
         'USER': 'postgres',
-        'PASSWORD': 'bdu1203346',
+        'PASSWORD': 'admin123',
         'HOST': 'localhost',
         'PORT': 5432,
     }

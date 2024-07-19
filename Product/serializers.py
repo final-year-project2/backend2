@@ -10,7 +10,7 @@ class TicketSerializer(serializers.ModelSerializer):
     # image_3 = serializers.ImageField(max_length=None, use_url=True, required=False)
     class Meta:
         model = Ticket
-        fields = ['seller','title', 'description', 'number_of_tickets','prize_categories','price_of_ticket','image_1','image_2','image_3']
+        fields = ['id', 'seller','title', 'description', 'number_of_tickets','prize_categories','my_datetime_field','date_createds','price_of_ticket','image_1','image_2','image_3']
 
     def validate_title(self, value):
         if not value:
@@ -43,4 +43,4 @@ class TicketSerializer(serializers.ModelSerializer):
 class SellerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seller
-        fields = ['user', 'image', 'successful_campaigns', 'date_created', 'rating']
+        fields = ['user', 'image', 'successful_campaigns','rating']

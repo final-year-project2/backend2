@@ -8,6 +8,7 @@ from UserAccount.models import Wallet,Transaction
 from Product.models import Ticket
 from .TransactionUpdateMixin import TransactionUpdate
 from django.shortcuts import get_object_or_404
+from Product.views import update_fully_purchased_at
 class PurchaseTicket(generics.ListCreateAPIView):
     queryset = PurchasedTicket.objects.all()
     permission_classes = [permissions.IsAuthenticated]
@@ -26,6 +27,21 @@ class PurchaseTicket(generics.ListCreateAPIView):
         # to get the trandsaction from the request
         transaction_from = request.data[0].get('Transaction_from')
         print(transaction_from)
+         # Validate ticket availability
+        ticket_counts = {}
+        for ticket_data in serializer.validated_data:
+            ticket = ticket_data['Ticket_id']
+            if ticket.id not in ticket_counts:
+                ticket_counts[ticket.id] = 0
+            ticket_counts[ticket.id] += 1
+
+        for ticket_id, requested_tickets_count in ticket_counts.items():
+            ticket = Ticket.objects.get(id=ticket_id)
+            available_tickets_count = int(ticket.number_of_tickets) - PurchasedTicket.objects.filter(Ticket_id=ticket).count()
+            if requested_tickets_count > available_tickets_count:
+                return Response({
+                    "message": f"Not enough tickets available for {ticket}. Requested: {requested_tickets_count}, Available: {available_tickets_count}"
+                }, status=status.HTTP_400_BAD_REQUEST)
         for ticket_data in serializer.validated_data:
             # here to get the price from the database 
             price = ticket_data['Ticket_id'].price_of_ticket
@@ -46,9 +62,16 @@ class PurchaseTicket(generics.ListCreateAPIView):
         
 
         self.perform_create(serializer)
+        # After tickets are created, update the fully_purchased_at field if needed
+        for ticket_data in serializer.validated_data:
+            ticket = ticket_data['Ticket_id']
+            update_fully_purchased_at(ticket.id)  # Assuming ticket is an instance of Ticket model
+
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-    
+
+    def perform_create(self, serializer):
+        serializer.save()
     def get_queryset(self):
         qs =  super().get_queryset()
         user = self.request.user

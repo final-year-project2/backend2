@@ -6,4 +6,5 @@ class PurchasedTicket(models.Model):
     User_id = models.ForeignKey(user,on_delete=models.CASCADE)
     Ticket_id = models.ForeignKey(Ticket,on_delete=models.CASCADE)
     Ticket_number = models.CharField(null=False)
-    
+    def __str__(self):
+          return self.Ticket_number
