@@ -24,7 +24,8 @@ class Ticket(models.Model):
     price_of_ticket=models.CharField(default=0)
     image_1 = models.ImageField(upload_to='ticket_images/',default='default_image.jpg')
     image_2 = models.ImageField(upload_to='ticket_images/',null=True,blank=True)
-    image_3 = models.ImageField(upload_to='ticket_images/',null=True,blank=True) # Store multiple images without specifying upload_to
+    image_3 = models.ImageField(upload_to='ticket_images/',null=True,blank=True)
+    # Store multiple images without specifying upload_to
 
 
 

@@ -1,8 +1,11 @@
 # serializers.py
 from rest_framework import serializers
 from Product import models
+from PurchasedTicket.models import PurchasedTicket
+
 
 from django.db.models import Count
+from UserAccount.models import userAccountModel
 class PichartSerializer(serializers.ModelSerializer):
     category_percentages = serializers.SerializerMethodField()
     class Meta:
@@ -26,3 +29,18 @@ class PichartSerializer(serializers.ModelSerializer):
          ]
 
          return category_percentages
+class BuyerSerializer(serializers.ModelSerializer):
+    # number_of_ticket=serializers.SerializerMethodField()
+    class Meta:
+        model=userAccountModel
+        fields=['name']
+        # fields=['name','number_of_ticket']
+        
+    # def get_number_of_ticket(self,obj):
+    #     seller_id=self.kwargs['seller_id']
+    #     # all_campaing_by_seller=Ticket.objects.filter(Seller=seller_id)
+    #     buyers=PurchasedTicket.objects.filter(ticket__seller__id=seller_id).values('User_id')
+    #     buyer_counted=buyers.Count('User_id')
+    #     return buyer_counted
+      
+        

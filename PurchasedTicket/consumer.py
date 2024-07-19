@@ -19,7 +19,7 @@ class PurchasedTicketConsumer(AsyncWebsocketConsumer):
         
         await self.accept()
         logger.info("websocket info")
-        await self.send(" websocket")
+        # await self.send(" websocket")
         
         
        
@@ -33,7 +33,7 @@ class PurchasedTicketConsumer(AsyncWebsocketConsumer):
      async def ticket_update(self, event):
         # This method will handle messages received from the group
           try:
-           await self.send(text_data='hello')
+          #  await self.send(text_data='hello')
          #   logger.info("Event object: %s", event)
            await self.send(text_data=json.dumps( event["content"]))
          

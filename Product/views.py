@@ -130,7 +130,7 @@ class RetriveTicketList(ListAPIView):
         else:
             category=self.kwargs['prize_categories']
             # ticket_left=mods.PurchasedTicket.objects.filter().count() -productModel.Ticket.number_of_tickets
-            return Ticket.objects.filter(prize_categories=category)
+            return Ticket.objects.filter(prize_categories=category).order_by('-my_datetime_field')
     ##ticket left number of buyer
     
     
