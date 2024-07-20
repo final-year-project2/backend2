@@ -35,14 +35,56 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '10.0.2.2',
     '192.168.137.3'
+    'localhost',
+    '127.0.0.1',
+    '[::1]',  # IPv6 localhost
+    '192.168.12.100'# Your IPv4 address'
 ]
 
-    
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'Product': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+# Q_CLUSTER = {
+#     'name': 'DjangoQ',
+#     'workers': 4,
+#     'recycle': 500,
+#     'timeout': 60,
+#     'compress': True,
+#     'save_limit': 250,
+#     'queue_limit': 500,
+#     'label': 'DjangoQ',
+#     'orm': 'default',
+# }  
 
 CORS_ALLOWED_ORIGINS = [
     '192.168.137.181', 
     '192.168.137.230',
     '192.168.137.3'
+    '192.168.12.100', 
+    '127.0.0.1'
     # Replace with your IP address and port
     # Add more origins if needed
 ]
@@ -61,6 +103,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'UserAccount',
+    # 'django_q',
     'Product',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',

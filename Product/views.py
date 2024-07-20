@@ -4,8 +4,9 @@ from rest_framework.views import APIView
 from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework import status
-from .models import Seller, Ticket
-from .serializers import TicketSerializer
+from .models import Seller, Ticket,Winner
+from PurchasedTicket.models import PurchasedTicket
+from .serializers import TicketSerializer,SellerSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.http import JsonResponse
 from django.views import View
@@ -32,38 +33,9 @@ class SaveTicketView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:    
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-# views.py)
-class BecomeSellerAPIView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
-    def post(self, request, format=None):
-        user_id = request.data.get('user_id')
-        if user_id is None:
-            return Response({'error': 'User ID is required'}, status=status.HTTP_400_BAD_REQUEST)
-        if Seller.objects.filter(user_id=user_id).exists():
-            seller = Seller.objects.get(user_id=user_id)
-            return Response({'message': 'User is already registered as a seller', 'seller_id': seller.id}, status=status.HTTP_200_OK)
         
-        try:
-            seller = Seller.objects.create(user_id=user_id)
-            return Response({'message': 'Seller registration successful', 'seller_id': seller.id}, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-
-
-    
-# views.py
-
-from rest_framework.views import APIView
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.response import Response
-from rest_framework import status
-from .models import Seller
-from .serializers import SellerSerializer
-from django.core.exceptions import ObjectDoesNotExist
-
 class BecomeSellerAPIView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
+    #parser_classes = (MultiPartParser, FormParser)
 
     def post(self, request, format=None):
         user_id = request.data.get('user_id')
@@ -132,7 +104,6 @@ class RetriveTicketList(ListAPIView):
             # ticket_left=mods.PurchasedTicket.objects.filter().count() -productModel.Ticket.number_of_tickets
             return Ticket.objects.filter(prize_categories=category).order_by('-my_datetime_field')
     ##ticket left number of buyer
-    
     
     
     

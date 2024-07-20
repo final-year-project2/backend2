@@ -29,6 +29,7 @@ class TicketSerializer(serializers.ModelSerializer):
         numbr_of_ticket=int(Ticket.objects.get(id=obj.id).number_of_tickets)
         ticket_left=numbr_of_ticket-purchased_tikcet
         return ticket_left
+        fields = ['id', 'seller','title', 'description', 'number_of_tickets','prize_categories','my_datetime_field','date_createds','price_of_ticket','image_1','image_2','image_3']
 
     def validate_title(self, value):
         if not value:
