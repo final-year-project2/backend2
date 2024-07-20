@@ -5,11 +5,12 @@ from django.conf import settings
 from twilio.rest import Client
 import random
 from django.utils import timezone
+from rest_framework import serializers
 
 
 import os
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 import logging
 
 logger=logging.getLogger(__name__)
@@ -25,9 +26,6 @@ class UserAcountSerializer(serializers.ModelSerializer):
     class Meta:
         model = userAccountModel
         fields = [
-
-            
-
             'id','name','Phone_no','password','otp',
 
         ]
@@ -49,20 +47,12 @@ class UserAcountSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         try:
-
-            
-
-
             account_sid = os.environ.get('ACCOUNT_SSID')
             auth_token =os.environ.get('AUTH_TOKEN') 
-
-         
-
             client = Client(account_sid, auth_token)
             message = client.messages.create(
             body=f'Hello your Otp is {Otp}',
-            from_='+13109064102',
-
+            from_='+13082223702',
             to=f'+251{Phone_no}'
             )
             print(message.sid)
@@ -70,8 +60,6 @@ class UserAcountSerializer(serializers.ModelSerializer):
             print('some thing went wrong try again ')
         return user
 
-
-from rest_framework import serializers
 
 # class SaveTicketSerializer(serializers.Serializer):
 #     title = serializers.CharField(max_length=100)
@@ -81,8 +69,8 @@ from rest_framework import serializers
 #     seller = serializers.CharField(max_length=100) # Adjust the field type as necessary
 #     image_1 = serializers.ImageField()
 #     image_2 = serializers.ImageField()
-#     image_3 = serializers.ImageField(
-def to_representation(self, instance):
+#     image_3 = serializers.ImageField()
+    def to_representation(self, instance):
         representatioin= super().to_representation(instance)
         representatioin['wallet_id']=instance.wallet.id
         return representatioin
@@ -98,12 +86,8 @@ class TransactionSerializer(serializers.ModelSerializer):
         # Corrected typo from 'balace' to 'balance'
         representation['wallet_balance'] = instance.wallet.balance
         return representation
-    
+
 class WalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wallet
         fields = '__all__'
-
-
-           
-     

@@ -12,10 +12,16 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 import json
+from rest_framework import permissions
 from rest_framework.generics import ListAPIView
+from PurchasedTicket import models
+from Product import models as productModel
+from django.db.models import Count
+from rest_framework.pagination import PageNumberPagination
+
 class SaveTicketView(APIView):
     parser_classes = (MultiPartParser, FormParser)
-    #permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     def get(self, request, format=None):
         # Handle GET request if needed
         return Response({'message': 'GET method is allowed'}, status=status.HTTP_200_OK)
@@ -43,11 +49,8 @@ class BecomeSellerAPIView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        
-class RetriveTicketList(ListAPIView):
-    queryset=Ticket.objects.all()
-    serializer_class=TicketSerializer
-    lookup_field='prize_categories'
+
+
     
 # views.py
 
@@ -65,6 +68,7 @@ class BecomeSellerAPIView(APIView):
     def post(self, request, format=None):
         user_id = request.data.get('user_id')
         image = request.data.get('image')
+
 
         if not user_id:
             return Response({'error': 'User ID is required'}, status=status.HTTP_404_BAD_REQUEST)
@@ -94,6 +98,7 @@ class BecomeSellerAPIView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+
 class CheckSellerView(APIView):
     def post(self, request, format=None):
         try:
@@ -107,4 +112,31 @@ class CheckSellerView(APIView):
                 return Response({'message': 'User is not registered as a seller'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        
+class  TicketPagination(PageNumberPagination):
+    page_size = 1  # Default page size
+    page_size_query_param = 'page_size'  # Allow the client to specify the page size
+    max_page_size = 100  
+## SENDING TICKET OBJECTS
+class RetriveTicketList(ListAPIView):
+    serializer_class=TicketSerializer
+    pagination_class=TicketPagination
 
+    def get_queryset(self):
+        if self.kwargs.get('prize_categories') == 'all':
+            # If 'all' is passed, return all tickets
+            return Ticket.objects.all()
+        else:
+            category=self.kwargs['prize_categories']
+            # ticket_left=mods.PurchasedTicket.objects.filter().count() -productModel.Ticket.number_of_tickets
+            return Ticket.objects.filter(prize_categories=category).order_by('-my_datetime_field')
+    ##ticket left number of buyer
+    
+    
+    
+    
+    
+    
+
+       

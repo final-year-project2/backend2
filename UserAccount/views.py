@@ -255,14 +255,19 @@ class UpdateWallet(APIView):
             print(f"serialized{serializer.data}")
             return Response(serializer.data,status=status.HTTP_200_OK)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    
 class RetriveWalletInformations(RetrieveAPIView):
     queryset=Wallet.objects.all()
     serializer_class=WalletSerializer
     lookup_field='id' 
         
 class RetiveTransaction(ListAPIView):
-    queryset=Transaction.objects.all()
+    queryset=Transaction.objects.all().order_by('-transaction_date')
     serializer_class=TransactionSerializer
     lookup_field='wallet'
+    
+    
+
+    
         
 
