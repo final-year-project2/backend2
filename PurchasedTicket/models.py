@@ -43,4 +43,5 @@ def ticket_purchased_broadcaster(sender,instance,created,**kwargs):
         channel_layer =get_channel_layer()
         
         async_to_sync(channel_layer.group_send)( f'ticket_updates_{seller_id}', message  )
-        
+        def __str__(self):
+          return self.Ticket_number
