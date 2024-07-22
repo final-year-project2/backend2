@@ -8,7 +8,6 @@ AbstractBaseUser => that provides a foundation for creating custom user models w
 PermissionsMixin => is a mixin class provided by Django that can be used in conjunction with the Django user model to add permission-related functionalities.
 
 BaseUserManager => this class in Django is a base class provided by Django's authentication system for creating custom user.It provides a set of methods and attributes that help with managing user creation and manipulation
-
 """
 class userAcountManager(BaseUserManager):
     def create_user(self,name,Phone_no,Otp,Otp_expre_at,Maximum_otp_try,Maximum_otp_out,password = None):

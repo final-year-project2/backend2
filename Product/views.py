@@ -45,8 +45,6 @@ class BecomeSellerAPIView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 
-
-    
 # views.py
 
 from rest_framework.views import APIView
@@ -107,13 +105,21 @@ class CheckSellerView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        
 ## SENDING TICKET OBJECTS
 class RetriveTicketList(ListAPIView):
     serializer_class=TicketSerializer
     def get_queryset(self):
         category=self.kwargs['prize_categories']
         return Ticket.objects.filter(prize_categories=category)[:10]
-    
-    
-       
+
+class AllTicketList(ListAPIView):
+    queryset = Ticket.objects.all()
+    serializer_class=TicketSerializer
+
+
+class RetriveSingleSellerTickets(ListAPIView):
+    serializer_class=TicketSerializer
+    def get_queryset(self):
+        seller=self.kwargs['seller']
+        return Ticket.objects.filter(seller=seller)[:10]
+

@@ -3,11 +3,16 @@ from rest_framework import serializers
 from django.core.exceptions import ValidationError
 from .models import Ticket
 from .models import Seller
+from UserAccount.serializer import UserAcountSerializer
+class SellerSerializer(serializers.ModelSerializer):
+    user = UserAcountSerializer()
+    class Meta:
+        model = Seller
+        fields = ['id','user', 'image', 'successful_campaigns', 'date_created', 'rating']
+
+        
 class TicketSerializer(serializers.ModelSerializer):
-    #prize_categories = serializers.JSONField()
-    # image_1 = serializers.ImageField(max_length=None, use_url=True, required=False)
-    # image_2 = serializers.ImageField(max_length=None, use_url=True, required=False)
-    # image_3 = serializers.ImageField(max_length=None, use_url=True, required=False)
+    seller = SellerSerializer()
     class Meta:
         model = Ticket
         fields = ['id','seller','title', 'description', 'number_of_tickets','prize_categories','price_of_ticket','image_1','image_2','image_3']
@@ -40,7 +45,4 @@ class TicketSerializer(serializers.ModelSerializer):
 # serializers.py
 
 
-class SellerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Seller
-        fields = ['user', 'image', 'successful_campaigns', 'date_created', 'rating']
+

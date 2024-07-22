@@ -26,7 +26,7 @@ class UserAcountSerializer(serializers.ModelSerializer):
     class Meta:
         model = userAccountModel
         fields = [
-            'id','name','Phone_no','password','otp',
+            'id','name','Phone_no','otp','password','is_active','is_staff'
 
         ]
     
