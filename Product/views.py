@@ -9,6 +9,7 @@ from PurchasedTicket.models import PurchasedTicket
 from .serializers import TicketSerializer,SellerSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.http import JsonResponse
+from django.db import transaction
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -19,10 +20,12 @@ from PurchasedTicket import models
 from Product import models as productModel
 from django.db.models import Count
 from rest_framework.pagination import PageNumberPagination
+import random
+
 
 class SaveTicketView(APIView):
     parser_classes = (MultiPartParser, FormParser)
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
     def get(self, request, format=None):
         # Handle GET request if needed
         return Response({'message': 'GET method is allowed'}, status=status.HTTP_200_OK)
@@ -45,14 +48,14 @@ class BecomeSellerAPIView(APIView):
         if not user_id:
             return Response({'error': 'User ID is required'}, status=status.HTTP_404_BAD_REQUEST)
 
-        try:
-            seller = Seller.objects.get(user_id=user_id)
-            return Response({
-                'message': 'User is already registered as a seller',
-                'seller_id': seller.id
-            }, status=status.HTTP_200_OK)
-        except ObjectDoesNotExist:
-            pass  # User is not already a seller, proceed with registration
+        # try:
+        #     seller = Seller.objects.get(user_id=user_id)
+        #     return Response({
+        #         'message': 'User is already registered as a seller',
+        #         'seller_id': seller.id
+        #     }, status=status.HTTP_200_OK)
+        # except ObjectDoesNotExist:
+        #     pass  # User is not already a seller, proceed with registration
 
         seller_data = {
             'user': user_id,
@@ -104,10 +107,84 @@ class RetriveTicketList(ListAPIView):
             # ticket_left=mods.PurchasedTicket.objects.filter().count() -productModel.Ticket.number_of_tickets
             return Ticket.objects.filter(prize_categories=category).order_by('-my_datetime_field')
     ##ticket left number of buyer
+    # class RetriveTicketList(ListAPIView):
+    #  serializer_class=TicketSerializer
+    # def get_queryset(self):
+    #     category=self.kwargs['prize_categories']
+    #     return Ticket.objects.filter(prize_categories=category)[:10] 
     
-    
+def update_fully_purchased_at(ticket_id):
+    # Ensure that ticket_id is a numeric ID
+    if isinstance(ticket_id, int):
+        ticket = Ticket.objects.get(id=ticket_id)
+        purchased_tickets_count = PurchasedTicket.objects.filter(Ticket_id=ticket).count()
+        # Convert number_of_tickets to int if it's a string
+        if isinstance(ticket.number_of_tickets, str):
+            ticket.number_of_tickets = int(ticket.number_of_tickets)
+        if purchased_tickets_count == ticket.number_of_tickets:
+            ticket.fully_purchased_at = timezone.now()
+            ticket.save()
+    else:
+        raise ValueError("The ticket_id must be a numeric value")
+def draw_winner(ticket_id):
+    try:
+        ticket = Ticket.objects.get(id=ticket_id)
+        if not ticket.winner_drawn:
+            with transaction.atomic():
+                purchased_tickets = PurchasedTicket.objects.filter(Ticket_id=ticket_id)
+                if purchased_tickets.exists():
+                    winner = random.choice(purchased_tickets)
+                    Winner.objects.create(ticket=ticket, winner=winner.User_id, Ticket_number=winner)
+                    ticket.winner_drawn = True
+                    ticket.save()
+                    return winner.Ticket_number  # Return winner's ticket number
+    except Ticket.DoesNotExist:
+        pass
+    return None
+class SelectWinnerView(APIView):
+    def post(self, request, *args, **kwargs):
+        try:
+            data = request.data
+            ticket_id = data.get('Ticket_id')
+
+            if ticket_id:
+                winner_ticket_number = draw_winner(ticket_id)
+                if winner_ticket_number:
+                    return Response({
+                        'status': 'success',
+                        'message': 'Winner selected successfully',
+                        'winner_ticket_number': winner_ticket_number
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        'status': 'error',
+                        'message': 'Failed to select winner or no purchased tickets found'
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    'status': 'error',
+                    'message': 'Invalid ticket_id'
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'status': 'error', 'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        
+        
+        
+        
+class SendLiveTicket(ListAPIView):
+    serializer_class=TicketSerializer
+    queryset=Ticket.objects.all()
+    def get_queryset(self):
+        seller_id=self.kwargs['seller_id']
+        qs =  super().get_queryset()
+        live_ticket_for_a_seller=Ticket.objects.filter( )
+        return qs.filter(seller=seller_id,winner_drawn=False)
+      
+        
     
     
     
 
        
+

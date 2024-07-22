@@ -16,7 +16,7 @@ class TicketSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ticket
-        fields = ['id','seller','title', 'description', 'number_of_tickets','prize_categories','price_of_ticket','image_1','image_2','image_3','number_of_buyer','ticket_left']
+        fields = ['id','seller','title', 'description', 'number_of_tickets','prize_categories','price_of_ticket','image_1','image_2','image_3','number_of_buyer','ticket_left','winner_drawn']
     def get_number_of_buyer(self,obj):
         #   number_of_buyer= models.PurchasedTicket.objects.values('Ticket_id').annotate(unique_buyer=Count('User_id',distinct=True))
           number_of_buyer= models.PurchasedTicket.objects.values('User_id').distinct().count()
