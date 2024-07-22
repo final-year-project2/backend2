@@ -19,6 +19,7 @@ class PurchasedTicket(models.Model):
 def ticket_purchased_broadcaster(sender,instance,created,**kwargs):
     if created:
         seller_id=instance.Ticket_id.seller.id
+        # ticket_id=kwargs['ticket_id']
         
         print(f'seller_id{seller_id}')
         left_ticket= int(instance.Ticket_id.number_of_tickets)-PurchasedTicket.objects.filter(Ticket_id=instance.Ticket_id).count()
