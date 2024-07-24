@@ -34,4 +34,5 @@ class Winner(models.Model):
     ticket = models.OneToOneField(Ticket, on_delete=models.CASCADE)
     winner = models.ForeignKey(userAccountModel, on_delete=models.CASCADE)
     Ticket_number=models.ForeignKey('PurchasedTicket.PurchasedTicket', on_delete=models.CASCADE)
+    winner_name = models.CharField(max_length=50)
     drawn_at = models.DateTimeField(auto_now_add=True)

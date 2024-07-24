@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import  SaveTicketView,BecomeSellerAPIView, CheckSellerView ,RetriveTicketList,SelectWinnerView,SystemSelectWinnerView
+from .views import UserTicketsView,CheckUserView
 from django.conf import settings
 from django.contrib import admin
 from django.conf.urls.static import static
@@ -12,7 +13,8 @@ urlpatterns = [
     path('ticket-list/<str:prize_categories>', RetriveTicketList.as_view(), name='ticket-list'),
     path('select-winner/', SelectWinnerView.as_view(), name='select_winner'),
     path('system-select-winner/', SystemSelectWinnerView.as_view(), name='system_select_winner'),
-    
+    path('user/<int:user_id>/tickets/', UserTicketsView.as_view(), name='user-tickets'),
+    path('check_user/', CheckUserView.as_view(), name='check_user'),
    
     # Add more URL patterns as needed
 

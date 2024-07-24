@@ -33,7 +33,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '[::1]',  # IPv6 localhost
-    '192.168.12.100'# Your IPv4 address'
+    '10.42.0.55'# Your IPv4 address'
 ]
 
 LOGGING = {
@@ -64,7 +64,7 @@ LOGGING = {
   
 
 CORS_ALLOWED_ORIGINS = [
-    '192.168.12.100', 
+    '10.42.0.55', 
     '127.0.0.1'
     # Replace with your IP address and port
     # Add more origins if needed
@@ -92,15 +92,13 @@ INSTALLED_APPS = [
     
 ]
 Q_CLUSTER = {
-    'name': 'DjangoQ',
+    'name': 'default',
     'workers': 4,
-    'recycle': 500,
-    'timeout': 60,
+    'retry': 120,
+    'timeout': 300,
+    'queue_limit': 50,
     'compress': True,
-    'save_limit': 250,
-    'queue_limit': 500,
-    'label': 'DjangoQ',
-    'orm': 'default',
+    'save_limit': 100,
 }
 
 REST_FRAMEWORK = {
